@@ -15,7 +15,7 @@ It can also run games for other consoles. This pack already contains the followi
 Available executables and arguments:
 
         - retroarch-clover <core> <rom> <clover_args>
-          runs retroarch with specified core,
+          runs RetroArch with specified core,
           designed for executing from clover shell, 
           so it parses all clover arguments (saves, aspect ratio, etc.)
         - /bin/gb <rom> <clover_args>
