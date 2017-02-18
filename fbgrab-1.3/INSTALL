@@ -1,0 +1,20 @@
+
+requirements to build:
+you need these on your system:
+libpng 
+libz   
+
+to build:
+run 
+make
+
+to install 
+run 
+make install
+
+Troubleshooting
+If you don't realize how to install splint, remove that row from the Makefile.
+You propably have the libs already installed but if not try to get the from your
+distribution and secondly from:
+zlib : http://www.gzip.org/zlib/ 
+libpng : http://www.libpng.org/   
