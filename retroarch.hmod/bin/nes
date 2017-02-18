@@ -7,4 +7,4 @@ if [ "$extension" == "fds" ]; then
   cp -f /usr/share/kachikachi/fds_bios.bin /tmp/disksys.rom
 fi
 
-exec retroarch-clover "$core" "$@"
+exec retroarch-clover "$core" "$@" --ra-allow-crt

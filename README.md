@@ -5,12 +5,13 @@ This is hakchi/hakchi2 module which adds the RetroArch emulator to your NES Mini
 It will automatically detect unsupported NES games and run them instead of the default emulator. Save states will work as usual.
 
 It can also run games for other consoles. This pack already contains the following cores:
-- emux_sms
-- fceumm
-- gambatte_libretro
-- genesis_plus_gx
-- nestopia
-- snes9x2010
+- fceumm (NES, many mappers, UNIF support)
+- nestopia (NES, FDS)
+- snes9x2010 (SNES)
+- gambatte_libretro (GB, GBC)
+- mednafen_gba (GBA)
+- genesis_plus_gx (SMS/Genesis/MD)
+- mupen64plus (N64)
 
 Available executables and arguments:
 
@@ -35,7 +36,12 @@ Available executables and arguments:
         - /bin/retroarch
           RetroArch itself
 
-Sometimes default emulator of NES mini is not working with some games when it should. So you can just add "--retroarch" command line argument to use RetroArch.
+Sometimes default emulator of NES Mini is not working with some games when it should. So you can just add "--retroarch" command line argument to use RetroArch.
+
+Known issues:
+- Nintendo 64 save-states are not working, battery backup working fine
+- Default CRT filter is not working, scanlines shader added instead but it's not working with all systems.
+- It's recommended to turn your NES Mini off from shell, not during game
 
 
 NES Mini port by madmonkey

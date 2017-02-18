@@ -10,11 +10,12 @@ if EXIST "%modname%" del /F /Q "%modname%"
 tar -czvf "%modname%" *
 if ERRORLEVEL 9009 goto notar
 if NOT ERRORLEVEL 0 goto error
-if NOT EXIST "..\%outdir%" md "..\%outdir%"
+cd ..
+if NOT EXIST "%outdir%" md "%outdir%"
 if NOT ERRORLEVEL 0 goto error
-if EXIST "..\%outdir%\%modname%" del /F /Q "..\%outdir%\%modname%"
+if EXIST "%outdir%\%modname%" del /F /S /Q "%outdir%\%modname%"
 if NOT ERRORLEVEL 0 goto error
-move /Y "%modname%" "..\%outdir%"
+move /Y "%moddir%\%modname%" "%outdir%"
 if not ERRORLEVEL 0 goto error
 echo Done!
 goto end

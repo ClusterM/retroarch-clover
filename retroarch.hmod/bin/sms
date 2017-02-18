@@ -1,2 +1,2 @@
 #!/bin/sh
-exec retroarch-clover genesis_plus_gx "$@"
+exec retroarch-clover genesis_plus_gx "$@" --ra-allow-crt

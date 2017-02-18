@@ -1,2 +1,2 @@
 #!/bin/sh
-exec retroarch-clover mupen64plus "$@"
+exec retroarch-clover mupen64plus "$@" --ra-nosaves

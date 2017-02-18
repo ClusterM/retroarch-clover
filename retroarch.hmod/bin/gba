@@ -1,2 +1,2 @@
 #!/bin/sh
-exec retroarch-clover mednafen_gba "$@"
+exec retroarch-clover mednafen_gba "$@" --ra-allow-crt
