@@ -6,14 +6,15 @@ for %%x in (%*) do set outdir=%1
 
 cd %moddir%
 if not ERRORLEVEL 0 goto error
-tar -czvf %modname% *
+if EXIST "%modname%" del /F /Q "%modname%"
+tar -czvf "%modname%" *
 if ERRORLEVEL 9009 goto notar
-if not ERRORLEVEL 0 goto error
-md ..\%outdir%
-if not ERRORLEVEL 0 goto error
-del /F /S /Q ..\%outdir%
-if not ERRORLEVEL 0 goto error
-move /Y %modname% ..\%outdir%
+if NOT ERRORLEVEL 0 goto error
+if NOT EXIST "..\%outdir%" md "..\%outdir%"
+if NOT ERRORLEVEL 0 goto error
+if EXIST "..\%outdir%\%modname%" del /F /Q "..\%outdir%\%modname%"
+if NOT ERRORLEVEL 0 goto error
+move /Y "%modname%" "..\%outdir%"
 if not ERRORLEVEL 0 goto error
 echo Done!
 goto end
