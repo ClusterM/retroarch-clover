@@ -1,2 +1,2 @@
 #!/bin/sh
-exec retroarch-clover gambatte "$@" --ra-allow-crt
+exec retroarch-clover gambatte "$@"

@@ -41,7 +41,7 @@ Sometimes default emulator of NES mini is not working with some games when it sh
 
 Known issues:
 - Nintendo 64 save-states are not working, battery backup working fine
-- Default CRT filter is not working, scanlines shader added instead but it's not working with all systems.
+- Default CRT filter is not working, scanlines shader added instead, only for NES
 - It's recommended to turn your NES Mini off from shell, not during game
 
 NES Mini port by madmonkey

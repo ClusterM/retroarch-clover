@@ -1,2 +1,2 @@
 #!/bin/sh
-exec retroarch-clover snes9x2010 "$@" --ra-allow-crt
+exec retroarch-clover snes9x2010 "$@"
