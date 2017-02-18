@@ -48,6 +48,6 @@ fi
 
 if [ "$emulator" == "retroarch" ]; then
 # Using RetroArch
-	[ -z "$core" ] && exec nes $filename
-	[ -z "$core" ] || exec retroarch-clover $core $filename
+	[ -z "$core" ] && exec nes $filename $args
+	[ -z "$core" ] || exec retroarch-clover $core $filename $args
 fi

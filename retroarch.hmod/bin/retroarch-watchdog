@@ -48,7 +48,7 @@ rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm
 # enable shader scanlines if need
 if [ "$crt" == "1" ]; then
   sed -i -e 's/video_shader = "[^"]*"/video_shader = "~\/shaders\/retroarch\.glslp"/g' /etc/libretro/retroarch.cfg
-  cp -f /etc/libretro/shaders/scanline.glslp /etc/libretro/shaders/retroarch.glslp
+  rsync -a -c /etc/libretro/shaders/scanline.glslp /etc/libretro/shaders/retroarch.glslp
 else
   sed -i -e 's/video_shader = "[^"]*"/video_shader = ""/g' /etc/libretro/retroarch.cfg
 fi

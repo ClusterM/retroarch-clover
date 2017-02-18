@@ -1,4 +1,5 @@
-=== RetroArch ===
+=== RetroArch mod for hakchi ===
+version 0.1
 
 This is hakchi/hakchi2 module which adds the RetroArch emulator to your NES Mini.
 
