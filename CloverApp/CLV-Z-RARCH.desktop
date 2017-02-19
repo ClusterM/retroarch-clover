@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Application
+Exec=/bin/retroarch-mini --
+Path=/var/lib/clover/profiles/0/CLV-Z-RARCH
+Name=RetroArch
+Icon=/usr/share/games/nes/kachikachi/CLV-Z-RARCH/CLV-Z-RARCH.png
+
+[X-CLOVER Game]
+Code=CLV-Z-RARCH
+TestID=777
+ID=0
+Players=1
+Simultaneous=0
+ReleaseDate=1983-07-15
+SaveCount=0
+SortRawTitle=retroarch
+SortRawPublisher=
+Copyright=hakchi2 ©2017 Alexey 'Cluster' Avdyukhin

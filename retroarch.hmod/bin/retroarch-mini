@@ -1,5 +1,10 @@
 #!/bin/sh
 export HOME=/etc/libretro
-core=$HOME/core/$1_libretro.so
-shift
-exec retroarch -c "$HOME/retroarch.cfg" -vfL "$core" ${1+"$@"}
+if [ "$1" == "null" ]; then
+  exec retroarch -c "$HOME/retroarch.cfg" -vf
+else
+  core=$HOME/core/$1_libretro.so
+  shift
+  args ${1+"$@"}
+  exec retroarch -c "$HOME/retroarch.cfg" -vfL "$core" ${1+"$@"}
+fi
