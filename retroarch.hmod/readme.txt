@@ -23,6 +23,10 @@ Available executables and arguments:
 	so it parses all clover arguments (saves, aspect ratio, etc.)
 - /bin/gb <rom> <clover_args>
   runs "gambatte" core
+- /bin/gbc <rom> <clover_args>
+  runs "gambatte" core
+- /bin/gba <rom> <clover_args>
+  runs "mednafen_gba" core
 - /bin/md <rom> <clover_args>
   runs "genesis_plus_gx" core
 - /bin/nes <rom> <clover_args>
