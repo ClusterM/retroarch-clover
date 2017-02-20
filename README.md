@@ -64,6 +64,7 @@ The following changes were made in this fork:
 - Use mGBA as GBA core
 - Added mednafen_pce_fast as PCE/TG16 core
 - Enter RetroArch in-game menu by pressing Select + Start
+- Added template for adding new cores via hakchi module system
 
 NES Mini port by madmonkey
 
