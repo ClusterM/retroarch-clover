@@ -1,7 +1,7 @@
-=== RetroArch mod for hakchi ===
-version 0.1
+=== RetroArch module for hakchi ===
+version 0.2_mod
 
-This is hakchi/hakchi2 module which adds the RetroArch emulator to your NES Mini.
+This is a hakchi/hakchi2 module which adds libretro cores and RetroArch frontend to your NES Mini.
 
 It will automatically detect unsupported NES games and run them instead of the default emulator. Save states will work as usual.
 
@@ -9,38 +9,19 @@ It can also run games for other consoles. This pack already contains the followi
 
 - fceumm (NES, many mappers, UNIF support)
 - nestopia (NES, FDS)
-- snes9x2010 (SNES)
-- gambatte_libretro (GB, GBC)
-- mednafen_gba (GBA)
-- genesis_plus_gx (SMS/Genesis/MD)
-- mupen64plus (N64)
 
 Available executables and arguments:
 
-- retroarch-clover <core> <rom> <clover_args>
+- /bin/retroarch-clover <core> <rom> <clover_args>
   runs RetroArch with specified core,
   designed for executing from clover shell, 
-	so it parses all clover arguments (saves, aspect ratio, etc.)
-- /bin/gb <rom> <clover_args>
-  runs "gambatte" core
-- /bin/gbc <rom> <clover_args>
-  runs "gambatte" core
-- /bin/gba <rom> <clover_args>
-  runs "mednafen_gba" core
-- /bin/md <rom> <clover_args>
-  runs "genesis_plus_gx" core
+  so it parses all clover arguments (saves, aspect ratio, etc.)
 - /bin/nes <rom> <clover_args>
-  runs "fceumm" core
-- /bin/sms <rom> <clover_args>
-  runs "emux_sms" core
-- /bin/snes <rom> <clover_args>
-  runs "snes9x2010" core
-- /bin/n64 <rom> <clover_args>
-  runs "mupen64plus" core
+  runs "fceumm" core or "nestopia" for FDS games
 - /bin/retroarch-mini [core] [rom] [args]
   runs RetroArch directly, without clover intergration
 - /bin/retroarch
-  RetroArch itself
+  RetroArch binary
 
 Sometimes default emulator of NES mini is not working with some games when it should. So you can just add "--retroarch" command line argument to use RetroArch.
 
@@ -49,6 +30,8 @@ Known issues:
 - Default CRT filter is not working, scanlines shader added instead, only for NES
 - It's recommended to turn your NES Mini off from shell, not during game
 
+Cores by libretro
 NES Mini port by madmonkey
 NES Mini shell integration by Cluster
+Additional modules by pcm
 (c) 2017

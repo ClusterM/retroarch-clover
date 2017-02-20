@@ -1,6 +1,6 @@
 #!/bin/sh
-moddir=retroarch.hmod
-modname=retroarch.hmod
+moddir=retroarch_mod.hmod
+modname=retroarch_mod.hmod
 outdir=output
 [ -z "$1" ] || outdir=$1
 cd "$moddir"
