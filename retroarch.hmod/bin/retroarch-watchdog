@@ -32,9 +32,9 @@ rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm
 [ ! -z "$sram" ] && [ -f "$sram" ] && cp -f "$sram" "$rsram" && echo cp -f "$sram" "$rsram"
 
 # core provided ratio for CRT mode
-[ "$filter" == "crt720" ] && ratio=21 && smooth=true && crt=1
+[ "$filter" == "crt720" ] && ratio=21 && smooth=false && crt=1
 # core provided ratio for 4:3 mode
-[ "$filter" == "gpu720" ] && ratio=21 && smooth=true
+[ "$filter" == "gpu720" ] && ratio=21 && smooth=false
 # pixel perfect - 1:1 for pixel perfect mode
 [ "$filter" == "ppu" ] && ratio=20 && smooth=false
 

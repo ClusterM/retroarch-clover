@@ -12,6 +12,7 @@ It can also run games for other consoles. This pack already contains the followi
 - mednafen_gba (GBA)
 - genesis_plus_gx (SMS/Genesis/MD)
 - mupen64plus (N64)
+- stella (Atari 2600)
 
 Available executables and arguments:
 
@@ -35,6 +36,8 @@ Available executables and arguments:
           runs "snes9x2010" core
         - /bin/n64 <rom> <clover_args>
           runs "mupen64plus" core
+		- /bin/a26 <rom> <clover_args>
+          runs "stella" core
         - /bin/retroarch-mini [core] [rom] [args]
           runs RetroArch directly, without clover intergration
         - /bin/retroarch
@@ -47,10 +50,20 @@ Known issues:
 - Default CRT filter is not working, scanlines shader added instead but it's not working with all systems.
 - It's recommended to turn your NES Mini off from shell, not during game
 
+The following changes were made in this fork: 
+- Added Stella core for Atari 2600 emulation
+- System dir is now '~/system'
+- Core info dir is now '~/info'
+- RGUI default browser dir is now '/usr/share/games/nes/kachikachi' instead of '/'
+- Disabled bilinear filtering for every preset
+- Enabled integer scaling
+- Greyscale palette for Gambatte core
 
 NES Mini port by madmonkey
 
 NES Mini shell integration by Cluster
+
+Module additions by pcm720
 
 RetroArch/libretro project: https://www.libretro.com
 
