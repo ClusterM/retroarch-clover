@@ -14,6 +14,7 @@ It can also run games for other consoles. This pack already contains the followi
 - mupen64plus (N64)
 - stella (Atari 2600)
 - picodrive (SMS, MD/Genesis, 32X, Pico)
+- mednafen_pce_fast (PC Engine/Turbografx 16)
 
 Available executables and arguments:
 
@@ -41,6 +42,8 @@ Available executables and arguments:
           runs "stella" core
         - /bin/32x <rom> <clover_args>
           runs "picodrive" core
+        - /bin/pce <rom> <clover_args>
+          runs "mednafen_pce_fast" core
         - /bin/retroarch-mini [core] [rom] [args]
           runs RetroArch directly, without clover intergration
         - /bin/retroarch
@@ -63,6 +66,7 @@ The following changes were made in this fork:
 - Greyscale palette for Gambatte core
 - Use mGBA as GBA core
 - Added PicoDrive as Sega 32X core
+- Added mednafen_pce_fast as PCE/TG16 core
 
 NES Mini port by madmonkey
 
