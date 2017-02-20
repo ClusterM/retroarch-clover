@@ -15,12 +15,11 @@ It can also run games for other consoles. This pack already contains the followi
 - genesis_plus_gx (SMS/Genesis/MD)
 - mupen64plus (N64)
 - stella (Atari 2600)
-- picodrive (SMS, MD/Genesis, 32X, Pico)
 - mednafen_pce_fast (PC Engine/Turbografx 16)
 
 Available executables and arguments:
 
-- retroarch-clover <core> <rom> <clover_args>
+- /bin/retroarch-clover <core> <rom> <clover_args>
   runs RetroArch with specified core,
   designed for executing from clover shell, 
 	so it parses all clover arguments (saves, aspect ratio, etc.)
@@ -42,10 +41,8 @@ Available executables and arguments:
   runs "mupen64plus" core
 - /bin/a26 <rom> <clover_args>
   runs "stella" core
-- /bin/32x <rom> <clover_args>
-  runs "picodrive" core
 - /bin/pce <rom> <clover_args>
-  runs "mednafen_pce_fast" cor
+  runs "mednafen_pce_fast" core
 - /bin/retroarch-mini [core] [rom] [args]
   runs RetroArch directly, without clover intergration
 - /bin/retroarch
@@ -68,8 +65,8 @@ Disabled bilinear filtering for every preset
 Enabled integer scaling
 Greyscale palette for Gambatte core
 Use mGBA as GBA core
-Added PicoDrive as Sega 32X core
 Added mednafen_pce_fast as PCE/TG16 core
+Enter RetroArch in-game menu by pressing Select + Start
 ------
 
 NES Mini port by madmonkey
