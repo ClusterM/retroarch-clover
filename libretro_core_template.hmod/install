@@ -1,0 +1,3 @@
+core_name=<>_libretro.so
+copy "$transferpath/$core_name" "$rootfs/etc/libretro/core/$core_name"
+return 1
