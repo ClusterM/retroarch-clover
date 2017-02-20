@@ -43,7 +43,9 @@ rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm
 
 # set aspect ratio in config
 [ -z "$ratio" ] || sed -i -e 's/aspect_ratio_index = "[^"]*"/aspect_ratio_index = "'$ratio'"/g' /etc/libretro/retroarch.cfg
-[ -z "$smooth" ] || sed -i -e 's/video_smooth = "[^"]*"/video_smooth = "'$smooth'"/g' /etc/libretro/retroarch.cfg
+
+# Don't write filtering option in config
+#[ -z "$smooth" ] || sed -i -e 's/video_smooth = "[^"]*"/video_smooth = "'$smooth'"/g' /etc/libretro/retroarch.cfg
 
 # enable shader scanlines if need
 if [ "$crt" == "1" ]; then
