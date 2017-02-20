@@ -9,10 +9,11 @@ It can also run games for other consoles. This pack already contains the followi
 - nestopia (NES, FDS)
 - snes9x2010 (SNES)
 - gambatte_libretro (GB, GBC)
-- mednafen_gba (GBA)
+- mgba (GBA)
 - genesis_plus_gx (SMS/Genesis/MD)
 - mupen64plus (N64)
 - stella (Atari 2600)
+- picodrive (SMS, MD/Genesis, 32X, Pico)
 
 Available executables and arguments:
 
@@ -25,7 +26,7 @@ Available executables and arguments:
         - /bin/gbc <rom> <clover_args>
           runs "gambatte" core
         - /bin/gba <rom> <clover_args>
-          runs "mednafen_gba" core
+          runs "mgba" core
         - /bin/md <rom> <clover_args>
           runs "genesis_plus_gx" core
         - /bin/nes <rom> <clover_args>
@@ -38,6 +39,8 @@ Available executables and arguments:
           runs "mupen64plus" core
 		- /bin/a26 <rom> <clover_args>
           runs "stella" core
+        - /bin/32x <rom> <clover_args>
+          runs "picodrive" core
         - /bin/retroarch-mini [core] [rom] [args]
           runs RetroArch directly, without clover intergration
         - /bin/retroarch
@@ -58,6 +61,8 @@ The following changes were made in this fork:
 - Disabled bilinear filtering for every preset
 - Enabled integer scaling
 - Greyscale palette for Gambatte core
+- Use mGBA as GBA core
+- Added PicoDrive as Sega 32X core
 
 NES Mini port by madmonkey
 
