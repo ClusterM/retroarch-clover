@@ -32,6 +32,7 @@ Please note:
 - If the file extension of your game is not supported by Hakchi2, you may need to change the path in command line arguments (in Hakchi2's game options) to make it point to the corresponding core
 - To use RetroArch for any NES game, just add "--retroarch" to command line arguments
 - To use Nestopia instead of FCEUmm, install use_nestopia.hmod module
+- You can re-enable bilinear filtering in RetroArch's settings (Settings —> Video —> Bilinear Filtering)
 
 ## Additional information
 
