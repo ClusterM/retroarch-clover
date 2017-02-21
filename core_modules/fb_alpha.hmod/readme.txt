@@ -1,6 +1,7 @@
 === Final Burn Alpha core for RetroArch ===
 
-This module will add support for Atari 2600 games to RetroArch
+This module will add support for various arcade games to RetroArch
+The BIOS files must be inside the game directory.
 
 Available executables and arguments:
 - /bin/fba <rom> <clover_args>
