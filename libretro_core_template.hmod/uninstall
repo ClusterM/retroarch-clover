@@ -1,2 +1,0 @@
-core_name=<>_libretro.so
-rm "$rootfs/etc/libretro/core/$core_name"

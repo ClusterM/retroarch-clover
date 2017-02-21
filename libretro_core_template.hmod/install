@@ -1,3 +1,4 @@
-core_name=<>_libretro.so
-copy "$transferpath/$core_name" "$rootfs/etc/libretro/core/$core_name"
+transfer_default
+chmod +x $rootfs/bin/*
+chmod +x $rootfs/usr/bin/*
 return 1
