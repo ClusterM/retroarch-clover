@@ -4,7 +4,9 @@ filename="$1"
 extension="${filename##*.}"
 if [ "$extension" == "fds" ]; then
   core=nestopia
-  cp -f /usr/share/kachikachi/fds_bios.bin /tmp/disksys.rom
+  if [ ! -f /etc/libretro/system/disksys.rom ]; then
+    cp -f /usr/share/kachikachi/fds_bios.bin /etc/libretro/system/disksys.rom
+  fi
 fi
 
 exec retroarch-clover "$core" "$@" --ra-allow-crt

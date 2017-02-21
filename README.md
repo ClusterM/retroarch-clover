@@ -1,4 +1,4 @@
-### RetroArch module for hakchi ###
+# RetroArch module for hakchi
 
 This is a hakchi/hakchi2 module which adds libretro cores and RetroArch front-end to your NES Mini.
 
@@ -18,12 +18,35 @@ And the following cores are available as additional modules (in core_modules fol
 - mednafen_pce_fast (PC Engine/Turbografx 16)
 - fb_alpha and fb_alpha_cps2 (various arcade machines)
 
+## How to use this
+
+1. Go to "releases" tab and download the newest release.zip 
+2. Unpack release.zip anywhere you want
+3. Copy retroarch.hmod and the cores you want (.hmod files from core_modules and core_modules_extra folders) to user_mods directory of Hakchi2.
+4. Install the modules (all modules can be installed in one go) via Hakchi2's Modules menu.
+5. Add the games as usual
+
+Please note:
+- To add RetroArch shortcut to NES Mini's shell, drag-and-drop CloverApp.zip to Hakchi2
+- To make your own RetroArch modules, use the structure from libretro_core_template.zip. Use exisiting modules as a reference.
+- If the file extension of your game is not supported by Hakchi2, you may need to change the path in command line arguments (in Hakchi2's game options) to make it point to the corresponding core
+- To use RetroArch for any NES game, just add "--retroarch" to command line arguments
+- To use Nestopia instead of FCEUmm, install use_nestopia.hmod module
+
+## Additional information
+
 Executables and arguments for all available cores:
 
         - /bin/retroarch-clover <core> <rom> <clover_args>
           runs RetroArch with specified core,
           designed for executing from clover shell, 
           so it parses all clover arguments (saves, aspect ratio, etc.)
+        - /bin/retroarch-mini [core] [rom] [args]
+          runs RetroArch directly, without clover intergration
+        - /bin/retroarch
+          RetroArch binary
+        - /bin/nes <rom> <clover_args>
+          runs "fceumm" core or "nestopia" core
         - /bin/gb <rom> <clover_args>
           runs "gambatte" core
         - /bin/gbc <rom> <clover_args>
@@ -36,8 +59,6 @@ Executables and arguments for all available cores:
           runs "genesis_plus_gx" core
         - /bin/gg <rom> <clover_args>
           runs "genesis_plus_gx" core
-        - /bin/nes <rom> <clover_args>
-          runs "fceumm" core or "nestopia" core
         - /bin/snes <rom> <clover_args>
           runs "snes9x2010" core
         - /bin/n64 <rom> <clover_args>
@@ -50,32 +71,14 @@ Executables and arguments for all available cores:
           runs "fb_alpha" core
         - /bin/cps2 <rom> <clover_args>
           runs "fb_alpha_cps2" core
-        - /bin/retroarch-mini [core] [rom] [args]
-          runs RetroArch directly, without clover intergration
-        - /bin/retroarch
-          RetroArch binary
 
-Sometimes default emulator of NES Mini is not working with some games when it should. So you can just add "--retroarch" command line argument to use RetroArch.
+## Known issues
 
-Known issues:
-- Nintendo 64 save-states are not working, battery backup working fine
+- Nintendo 64 save-states are not working, battery backups work fine
 - Default CRT filter is not working, scanlines shader added instead but it's not working with all systems.
-- It's recommended to turn your NES Mini off from shell, not during game
+- It's recommended to turn your NES Mini off from shell, not during the game
 
-The following changes were made in this fork: 
-- Added Stella core for Atari 2600 emulation
-- System dir is now '~/system'
-- Core info dir is now '~/info'
-- RGUI default browser dir is now '/usr/share/games/nes/kachikachi' instead of '/'
-- Disabled bilinear filtering for every preset
-- Enabled integer scaling
-- Greyscale palette for Gambatte core
-- Use mGBA as GBA core
-- Added mednafen_pce_fast as PCE/TG16 core
-- Enter RetroArch in-game menu by pressing Select + Start
-- Added template for adding new cores via hakchi module system
-- Cores are now represented as additional modules
-- Added Final Burn Alpha and Final Burn Alpha CPS2 cores
+## Credits
 
 NES Mini port by madmonkey
 

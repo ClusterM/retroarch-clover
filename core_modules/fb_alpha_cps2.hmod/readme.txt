@@ -1,6 +1,7 @@
 === Final Burn Alpha CPS2 core for RetroArch ===
 
-This module will add support for Atari 2600 games to RetroArch
+This module will add support for CP System II arcade games to RetroArch
+The BIOS files must be inside the game directory
 
 Available executables and arguments:
 - /bin/cps2 <rom> <clover_args>

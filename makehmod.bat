@@ -1,6 +1,6 @@
 @echo off
-set moddir=retroarch_mod.hmod
-set modname=retroarch_mod.hmod
+set moddir=retroarch.hmod
+set modname=retroarch.hmod
 set outdir=output
 for %%x in (%*) do set outdir=%1
 
