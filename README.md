@@ -16,6 +16,7 @@ And the following cores are available as additional modules (in core_modules fol
 - mupen64plus (Nintendo 64)
 - stella (Atari 2600)
 - mednafen_pce_fast (PC Engine/Turbografx 16)
+- fb_alpha and fb_alpha_cps2 (various arcade machines)
 
 Executables and arguments for all available cores:
 
@@ -45,6 +46,10 @@ Executables and arguments for all available cores:
           runs "stella" core
         - /bin/pce <rom> <clover_args>
           runs "mednafen_pce_fast" core
+        - /bin/fba <rom> <clover_args>
+          runs "fb_alpha" core
+        - /bin/cps2 <rom> <clover_args>
+          runs "fb_alpha_cps2" core
         - /bin/retroarch-mini [core] [rom] [args]
           runs RetroArch directly, without clover intergration
         - /bin/retroarch
@@ -70,6 +75,7 @@ The following changes were made in this fork:
 - Enter RetroArch in-game menu by pressing Select + Start
 - Added template for adding new cores via hakchi module system
 - Cores are now represented as additional modules
+- Added Final Burn Alpha and Final Burn Alpha CPS2 cores
 
 NES Mini port by madmonkey
 
