@@ -18,11 +18,6 @@ And the following cores are available as additional modules (in core_modules fol
 - mednafen_pce_fast (PC Engine/Turbografx 16)
 - fb_alpha and fb_alpha_cps2 (various arcade machines)
 
-RetroArch modules created by other users (in core_modules_extra folder):
-- fbalpha2012_neogeo (Neo-Geo), provided by 1lokolo1/nesito
-- fuse (ZX Spectrum), provided by 1lokolo1/nesito
-- caprice32 (Amstrad CPC), provided by 1lokolo1/nesito
-
 ## How to use this
 
 1. Go to "releases" tab and download the newest release.zip 
@@ -76,12 +71,6 @@ Executables and arguments for all available cores:
           runs "fb_alpha" core
         - /bin/cps2 <rom> <clover_args>
           runs "fb_alpha_cps2" core
-        - /bin/neo <rom> <clover_args>
-          runs "fbalpha2012_neogeo" core
-        - /bin/cpc <rom> <clover_args>
-          runs "caprice32" core
-        - /bin/zx <rom> <clover_args>
-          runs "fuse" core
 
 ## Known issues
 
