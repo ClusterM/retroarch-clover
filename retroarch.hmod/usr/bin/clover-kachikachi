@@ -23,6 +23,7 @@ done
 
 # But this information is not corrent if it was FDS file or UNIF file
 [ "$extension" == "fds" ] && emulator=kachikachi
+[ "$extension" == "qd" ] && emulator=kachikachi
 [ "$extension" == "unf" ] && emulator=retroarch
 [ "$extension" == "unif" ] && emulator=retroarch
 

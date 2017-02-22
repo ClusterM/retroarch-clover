@@ -2,7 +2,7 @@
 core=fceumm
 filename="$1"
 extension="${filename##*.}"
-if [ "$extension" == "fds" ]; then
+if [ "$extension" == "fds" ] || [ "$extension" == "qd" ]; then
   core=nestopia
   if [ ! -f /etc/libretro/system/disksys.rom ]; then
     cp -f /usr/share/kachikachi/fds_bios.bin /etc/libretro/system/disksys.rom
