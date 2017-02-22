@@ -1,8 +1,93 @@
 #!/bin/sh
-core=$1
-shift
-retroarch-watchdog $$ $core ${1+"$@"} &
-while true; do
-# Zzz... I'll sleep untill my death
-sleep 42
+HOME=/etc/libretro
+corename=$1
+core=$HOME/core/$1_libretro.so
+rom=$2
+id=$(echo $(basename "$rom") | cut -f 1 -d '.')
+autosave="/var/cache/$id.state.auto"
+rsram="/var/cache/$id.srm"
+t_suffix=_time.txt
+shift 2
+
+crt=0
+allow_crt=0
+
+while [ $# -gt 0 ]; do
+  [ "$1" == "--load-state-file" ] && load=$2
+  [ "$1" == "--save-on-quit" ] && save=$2
+  [ "$1" == "--save-screenshot-on-quit" ] && screenshot=$2
+  [ "$1" == "--save-data-backing-file" ] && sram=$2
+  [ "$1" == "--graphic-filter" ] && filter=$2
+  [ "$1" == "--enable-crt-scanlines" ] && crt=1
+  [ "$1" == "--ra-allow-crt" ] && allow_crt=1
+  [ "$1" == "--ra-extra" ] && extra=$2
+  [ "$1" == "--ra-nosaves" ] && nosaves=1
+  shift
 done
+
+# saves if any
+rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm
+[ ! -z "$load" ] && [ -f "$load" ] && [ -z "$nosaves" ] && cp -f "$load" "$autosave" && echo cp -f "$load" "$autosave"
+[ ! -z "$sram" ] && [ -f "$sram" ] && cp -f "$sram" "$rsram" && echo cp -f "$sram" "$rsram"
+
+# core provided ratio for CRT mode
+[ "$filter" == "crt720" ] && ratio=21 && smooth=false && crt=1
+# core provided ratio for 4:3 mode
+[ "$filter" == "gpu720" ] && ratio=21 && smooth=false
+# pixel perfect - 1:1 for pixel perfect mode
+[ "$filter" == "ppu" ] && ratio=20 && smooth=false
+
+# Allow scanlines only for simple systems
+[ "$allow_crt" == "1" ] || crt=0
+
+# Set aspect ratio in config
+[ -z "$ratio" ] || sed -i -e 's/aspect_ratio_index = "[^"]*"/aspect_ratio_index = "'$ratio'"/g' /etc/libretro/retroarch.cfg
+
+# enable shader scanlines if need
+if [ "$crt" == "1" ]; then
+  sed -i -e 's/video_shader = "[^"]*"/video_shader = "~\/shaders\/retroarch\.glslp"/g' /etc/libretro/retroarch.cfg
+  rsync -a -c /etc/libretro/shaders/scanline.glslp /etc/libretro/shaders/retroarch.glslp
+else
+  sed -i -e 's/video_shader = "[^"]*"/video_shader = ""/g' /etc/libretro/retroarch.cfg
+fi
+
+# Start timestamp
+ts=$(date +"%s")
+tm=0
+[ -f "$load$t_suffix" ] && tm=$(cat "$load$t_suffix")
+
+retroarch -c "$HOME/retroarch.cfg" -vfL "$core" "$rom" $extra &
+rpid=$!
+trap "kill $rpid" SIGTERM
+sleep 2
+rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm
+
+while [ "$(ps -o pid | grep -c $rpid)" == "1" ]; do
+usleep 100000
+done
+
+kill $rpid
+# We can't let clover shell load so fast, so killing it
+pkill -KILL clover-mcp
+
+[ ! -z "$save" ] && mkdir -p $(dirname "$save")
+[ ! -z "$sram" ] && mkdir -p $(dirname "$sram")
+[ ! -z "$screenshot" ] && mkdir -p $(dirname "$screenshot")
+
+# Screenshot! It's not so fast...
+[ -z "$screenshot" ] || [ -z "$nosaves" ] && fbgrab -z 0 "$screenshot"
+
+# Saves!
+[ ! -z "$save" ] && [ -f "$autosave" ] && [ -z "$nosaves" ] && mv -f "$autosave" "$save"
+[ ! -z "$sram" ] && [ -f "$rsram" ] && mv -f "$rsram" "$sram"
+
+# Time
+ts2=$(date +"%s")
+tm=$((tm + ts2 - ts))
+echo $tm > "$save$t_suffix"
+
+# Back to shell
+clover-mcp
+
+return 0
+
