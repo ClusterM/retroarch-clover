@@ -5,6 +5,5 @@ if [ "$1" == "null" ]; then
 else
   core=$HOME/core/$1_libretro.so
   shift
-  args ${1+"$@"}
   exec retroarch -c "$HOME/retroarch.cfg" -vfL "$core" ${1+"$@"}
 fi
