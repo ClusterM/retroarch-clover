@@ -62,7 +62,7 @@ trap "kill $rpid" SIGTERM
 sleep 2
 rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm
 
-while [ "$(ps -o pid | grep -c $rpid)" == "1" ]; do
+while [ "$(ps -o pid | grep -c $rpid)" != "0" ]; do
 usleep 100000
 done
 
