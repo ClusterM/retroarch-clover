@@ -23,7 +23,6 @@ done
 
 # But this information is not corrent if it was FDS file or UNIF file
 [ "$extension" == "fds" ] && emulator=kachikachi
-[ "$extension" == "qd" ] && emulator=kachikachi
 [ "$extension" == "unf" ] && emulator=retroarch
 [ "$extension" == "unif" ] && emulator=retroarch
 
@@ -32,8 +31,11 @@ while [ $# -gt 0 ]; do
 	[ "$1" == "--core" ] && core=$2
   shift
 done
+args="$(echo $args | sed 's/--retroarch//g')"
+[ "$extension" == "qd" ] && emulator=kachikachi
 
 echo using $emulator
+args="$(echo $args | sed 's/--retroarch//g')"
 
 if [ "$emulator" == "kachikachi" ]; then
 # Seems like this game will work on default emulator

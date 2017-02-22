@@ -2,11 +2,15 @@
 core=fceumm
 filename="$1"
 extension="${filename##*.}"
+crt=--ra-allow-crt
 if [ "$extension" == "fds" ] || [ "$extension" == "qd" ]; then
   core=nestopia
-  if [ ! -f /etc/libretro/system/disksys.rom ]; then
-    cp -f /usr/share/kachikachi/fds_bios.bin /etc/libretro/system/disksys.rom
+  crt=0
+  biosdir=/etc/libretro/system
+  if [ ! -f $biosdir/disksys.rom ]; then
+    mkdir -p $biosdir
+    cp -f /usr/share/kachikachi/fds_bios.bin $biosdir/disksys.rom
   fi
 fi
 
-exec retroarch-clover "$core" "$@" --ra-allow-crt
+exec retroarch-clover "$core" "$@" $crt
