@@ -35,7 +35,6 @@ args="$(echo $args | sed 's/--retroarch//g')"
 [ "$extension" == "qd" ] && emulator=kachikachi
 
 echo using $emulator
-args="$(echo $args | sed 's/--retroarch//g')"
 
 if [ "$emulator" == "kachikachi" ]; then
 # Seems like this game will work on default emulator
