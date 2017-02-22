@@ -10,7 +10,7 @@ Available executables and arguments:
 - /bin/gg <rom> <clover_args>
   runs "genesis_plus_gx" core
 
-Core by libretro
+Core by libretro (Lakka for Raspberry Pi 2/3)
 Module by pcm
 Hakchi module system by madmonkey
 NES Mini shell integration by Cluster

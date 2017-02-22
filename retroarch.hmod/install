@@ -1,4 +1,6 @@
 transfer_default
 chmod +x $rootfs/bin/*
 chmod +x $rootfs/usr/bin/*
+mkdir -p $rootfs/etc/libretro/system
+cp -f /newroot/usr/share/kachikachi/fds_bios.bin $rootfs/etc/libretro/system/disksys.rom
 return 1

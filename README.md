@@ -8,15 +8,15 @@ It can also run games for other consoles. This pack already contains the followi
 - fceumm (Famicom/Nintendo Entertainment System, many mappers, UNIF support)
 - nestopia (Famicom/Nintendo Entertainment System, Famicom Disk System)
 
-And the following cores are available as additional modules (in core_modules folder):
+The following cores are available as additional modules (in core_modules folder):
 - snes9x2010 (Super Famicom/Super Nintendo)
 - gambatte_libretro (Game Boy, Game Boy Color)
 - mgba (Game Boy Advance)
 - genesis_plus_gx (Sega Master System, Genesis/Mega Drive, Game Gear)
-- mupen64plus (Nintendo 64)
 - stella (Atari 2600)
 - mednafen_pce_fast (PC Engine/Turbografx 16)
 - fb_alpha and fb_alpha_cps2 (various arcade machines)
+- picodrive (Sega Master System, Genesis/Mega Drive, Game Gear, Sega 32X)
 
 ## How to use this
 
@@ -32,6 +32,7 @@ Please note:
 - If the file extension of your game is not supported by Hakchi2, you may need to change the path in command line arguments (in Hakchi2's game options) to make it point to the corresponding core
 - To use RetroArch for any NES game, just add "--retroarch" to command line arguments
 - To use Nestopia instead of FCEUmm, install use_nestopia.hmod module
+- To use PicoDrive for all Genesis/Mega Drive games instead of Genesis Plus GX, install use_picodrive.hmod module. Make sure that picodrive module is installed before installing use_picodrive!
 - You can re-enable bilinear filtering in RetroArch's settings (Settings —> Video —> Bilinear Filtering)
 
 ## Additional information
@@ -60,10 +61,12 @@ Executables and arguments for all available cores:
           runs "genesis_plus_gx" core
         - /bin/gg <rom> <clover_args>
           runs "genesis_plus_gx" core
+        - /bin/32x <rom> <clover_args>
+          runs "picodrive" core
         - /bin/snes <rom> <clover_args>
           runs "snes9x2010" core
         - /bin/n64 <rom> <clover_args>
-          runs "mupen64plus" core or "glupen64" core
+          runs "glupen64" core
         - /bin/a26 <rom> <clover_args>
           runs "stella" core
         - /bin/pce <rom> <clover_args>
@@ -75,7 +78,7 @@ Executables and arguments for all available cores:
 
 ## Known issues
 
-- Nintendo 64 save-states are not working, battery backups work fine
+- Nintendo 64 and CP System II save-states are not working, battery backups work fine
 - Default CRT filter is not working, scanlines shader added instead but it's not working with all systems.
 - It's recommended to turn your NES Mini off from shell, not during the game
 
