@@ -9,28 +9,30 @@ emulator=retroarch
 args=$@
 filename=$1
 extension=${filename##*.}
-header=$(hexdump -v -n 8 -e '1/1 "%02X"' "$filename")
-mapper=$((0x${header:14:1}${header:12:1}))
-fourscreen=$(expr $((0x${header:13:1})) / 8)
 
-echo mapper: $mapper
-echo four-screen: $fourscreen
+if [ "$extension" == "nes" ]; then
+  header=$(hexdump -v -n 8 -e '1/1 "%02X"' "$filename")
+  mapper=$((0x${header:14:1}${header:12:1}))
+  fourscreen=$(expr $((0x${header:13:1})) / 8)
 
-for m in $supported_mappers; do
-  [ "$m" == "$mapper" ] && emulator=kachikachi
-done
-[ "$fourscreen" == "1" ] && emulator=retroarch
+  echo mapper: $mapper
+  echo four-screen: $fourscreen
 
-# But this information is not corrent if it was FDS file or UNIF file
+  for m in $supported_mappers; do
+    [ "$m" == "$mapper" ] && emulator=kachikachi
+  done
+  [ "$fourscreen" == "1" ] && emulator=retroarch
+fi
+
 [ "$extension" == "fds" ] && emulator=kachikachi
-[ "$extension" == "unf" ] && emulator=retroarch
-[ "$extension" == "unif" ] && emulator=retroarch
 
 while [ $# -gt 0 ]; do
   [ "$1" == "--retroarch" ] && emulator=retroarch
 	[ "$1" == "--core" ] && core=$2
   shift
 done
+
+# Do not use retroarch for original qd games
 args="$(echo $args | sed 's/--retroarch//g')"
 [ "$extension" == "qd" ] && emulator=kachikachi
 
