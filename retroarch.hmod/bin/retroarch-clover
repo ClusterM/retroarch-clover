@@ -3,7 +3,8 @@ HOME=/etc/libretro
 corename=$1
 core=$HOME/core/$1_libretro.so
 rom=$2
-id=$(echo $(basename "$rom") | cut -f 1 -d '.')
+filename=$(basename "$rom")
+id=${filename%.*}
 autosave="/var/cache/$id.state.auto"
 rsram="/var/cache/$id.srm"
 t_suffix=_time.txt
@@ -62,6 +63,7 @@ trap "kill $rpid" SIGTERM
 sleep 2
 rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm
 
+# Playing games until reset pressed
 wait $rpid
 
 # We can't let clover shell load so fast, so killing it
