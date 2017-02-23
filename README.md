@@ -29,6 +29,7 @@ The following cores are available as additional modules (in core_modules folder)
 Please note:
 - To add RetroArch shortcut to NES Mini's shell, drag-and-drop CloverApp.zip to Hakchi2
 - To make your own RetroArch modules, use the structure from libretro_core_template.zip. Use exisiting modules as a reference.
+- To add your own BIOS images for custom cores, use bios_template.zip (please read the readme.txt inside).
 - If the file extension of your game is not supported by Hakchi2, you may need to change the path in command line arguments (in Hakchi2's game options) to make it point to the corresponding core
 - To use RetroArch for any NES game, just add "--retroarch" to command line arguments. If you need to specify NES core, use "--retroarch --core fceumm" to use FCEUmm for this game or "--retroarch --core nestopia" to use Nestopia
 - To use Nestopia instead of FCEUmm, install use_nestopia.hmod module
