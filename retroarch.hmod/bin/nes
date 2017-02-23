@@ -6,11 +6,6 @@ crt=--ra-allow-crt
 if [ "$extension" == "fds" ] || [ "$extension" == "qd" ]; then
   core=nestopia
   crt=0
-  biosdir=/etc/libretro/system
-  if [ ! -f $biosdir/disksys.rom ]; then
-    mkdir -p $biosdir
-    cp -f /usr/share/kachikachi/fds_bios.bin $biosdir/disksys.rom
-  fi
 fi
 
 exec retroarch-clover "$core" "$@" $crt

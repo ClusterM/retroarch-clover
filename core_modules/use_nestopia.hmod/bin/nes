@@ -1,6 +1,9 @@
 #!/bin/sh
-if [ ! -f /etc/libretro/system/disksys.rom ]; then
-  cp -f /usr/share/kachikachi/fds_bios.bin /etc/libretro/system/disksys.rom
+filename="$1"
+extension="${filename##*.}"
+crt=--ra-allow-crt
+if [ "$extension" == "fds" ] || [ "$extension" == "qd" ]; then
+  crt=0
 fi
 
-exec retroarch-clover nestopia "$@" --ra-allow-crt
+exec retroarch-clover nestopia "$@" $crt
