@@ -62,11 +62,8 @@ trap "kill $rpid" SIGTERM
 sleep 2
 rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm
 
-while [ "$(ps -o pid | grep -c $rpid)" != "0" ]; do
-usleep 100000
-done
+wait $rpid
 
-kill $rpid
 # We can't let clover shell load so fast, so killing it
 pkill -KILL clover-mcp
 
