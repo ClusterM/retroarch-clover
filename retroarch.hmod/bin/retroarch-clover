@@ -41,8 +41,11 @@ rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm
 # Allow scanlines only for simple systems
 [ "$allow_crt" == "1" ] || crt=0
 
-# Set aspect ratio in config
-[ -z "$ratio" ] || sed -i -e 's/aspect_ratio_index = "[^"]*"/aspect_ratio_index = "'$ratio'"/g' /etc/libretro/retroarch.cfg
+# Set aspect ratio in config only if current ratio is 20 (1:1 PAR) or 21 (core provided)
+current_ratio=$(cat /etc/libretro/retroarch.cfg | grep "aspect_ratio_index" | sed 's/[^0-9]*//g')
+if [ -z "$ratio" ] || [ "$current_ratio" == "21" ] || [ "$current_ratio" == "20" ]; then 
+  sed -i -e 's/aspect_ratio_index = "[^"]*"/aspect_ratio_index = "'$ratio'"/g' /etc/libretro/retroarch.cfg
+fi
 
 # enable shader scanlines if need
 if [ "$crt" == "1" ]; then
