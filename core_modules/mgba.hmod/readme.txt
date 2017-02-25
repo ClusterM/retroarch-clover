@@ -6,7 +6,7 @@ Available executables and arguments:
 - /bin/gba <rom> <clover_args>
   runs "mgba" core
 
-Core by libretro (Lakka for Raspberry Pi 2/3)
+Core by libretro
 Module by pcm
 Hakchi module system by madmonkey
 NES Mini shell integration by Cluster
