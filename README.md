@@ -9,7 +9,7 @@ It can also run games for other consoles. This pack already contains the followi
 - nestopia (Famicom/Nintendo Entertainment System, Famicom Disk System)
 
 The following cores are available as additional modules (in core_modules folder):
-- snes9x2010 (Super Famicom/Super Nintendo)
+- snes9x2005 (Super Famicom/Super Nintendo)
 - gambatte_libretro (Game Boy, Game Boy Color)
 - mgba (Game Boy Advance)
 - genesis_plus_gx (Sega Master System, Genesis/Mega Drive, Game Gear)
@@ -67,7 +67,7 @@ Executables and arguments for all available cores:
         - /bin/32x <rom> <clover_args>
           runs "picodrive" core
         - /bin/snes <rom> <clover_args>
-          runs "snes9x2010" core
+          runs "snes9x2005" core
         - /bin/n64 <rom> <clover_args>
           runs "glupen64" core
         - /bin/a26 <rom> <clover_args>
