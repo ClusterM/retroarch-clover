@@ -7,6 +7,7 @@ filename=$(basename "$rom")
 id=${filename%.*}
 autosave="/var/cache/$id.state.auto"
 rsram="/var/cache/$id.srm"
+rsav="/var/cache/$id.sav"
 t_suffix=_time.txt
 shift 2
 
@@ -27,9 +28,15 @@ while [ $# -gt 0 ]; do
 done
 
 # saves if any
-rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm
+rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm /var/cache/*.sav
 [ ! -z "$load" ] && [ -f "$load" ] && [ -z "$nosaves" ] && cp -f "$load" "$autosave" && echo cp -f "$load" "$autosave"
-[ ! -z "$sram" ] && [ -f "$sram" ] && cp -f "$sram" "$rsram" && echo cp -f "$sram" "$rsram"
+# Nestopia names FDS saves as $id.sav, so here's a quick fix
+if [ "$corename" == "nestopia" ]; then
+  [ ! -z "$sram" ] && [ -f "$sram" ] && cp -f "$sram" "$rsav" && echo cp -f "$sram" "$rsav"
+else
+  [ ! -z "$sram" ] && [ -f "$sram" ] && cp -f "$sram" "$rsram" && echo cp -f "$sram" "$rsram"
+fi
+
 
 # core provided ratio for CRT mode
 [ "$filter" == "crt720" ] && ratio=21 && smooth=false && crt=1
@@ -64,7 +71,7 @@ retroarch -c "$HOME/retroarch.cfg" -vfL "$core" "$rom" $extra &
 rpid=$!
 trap "kill $rpid" SIGTERM
 sleep 2
-rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm
+rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm /var/cache/*.sav
 
 # Playing games until reset pressed
 wait $rpid
@@ -81,7 +88,11 @@ pkill -KILL clover-mcp
 
 # Saves!
 [ ! -z "$save" ] && [ -f "$autosave" ] && [ -z "$nosaves" ] && mv -f "$autosave" "$save"
-[ ! -z "$sram" ] && [ -f "$rsram" ] && mv -f "$rsram" "$sram"
+if [ "$corename" == "nestopia" ]; then
+  [ ! -z "$sram" ] && [ -f "$rsav" ] && mv -f "$rsav" "$sram"
+else
+  [ ! -z "$sram" ] && [ -f "$rsram" ] && mv -f "$rsram" "$sram"
+fi
 
 # Time
 ts2=$(date +"%s")
