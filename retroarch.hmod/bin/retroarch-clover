@@ -5,6 +5,7 @@ core=$HOME/core/$1_libretro.so
 rom=$2
 filename=$(basename "$rom")
 id=${filename%.*}
+extension="${filename##*.}"
 autosave="/var/cache/$id.state.auto"
 rsram="/var/cache/$id.srm"
 rsav="/var/cache/$id.sav"
@@ -31,7 +32,7 @@ done
 rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm /var/cache/*.sav
 [ ! -z "$load" ] && [ -f "$load" ] && [ -z "$nosaves" ] && cp -f "$load" "$autosave" && echo cp -f "$load" "$autosave"
 # Nestopia names FDS saves as $id.sav, so here's a quick fix
-if [ "$corename" == "nestopia" ]; then
+if [ "$corename" == "nestopia" ] && [ "$extension" == "fds" ]; then
   [ ! -z "$sram" ] && [ -f "$sram" ] && cp -f "$sram" "$rsav" && echo cp -f "$sram" "$rsav"
 else
   [ ! -z "$sram" ] && [ -f "$sram" ] && cp -f "$sram" "$rsram" && echo cp -f "$sram" "$rsram"
@@ -88,7 +89,7 @@ pkill -KILL clover-mcp
 
 # Saves!
 [ ! -z "$save" ] && [ -f "$autosave" ] && [ -z "$nosaves" ] && mv -f "$autosave" "$save"
-if [ "$corename" == "nestopia" ]; then
+if [ "$corename" == "nestopia" ] && [ "$extension" == "fds" ]; then
   [ ! -z "$sram" ] && [ -f "$rsav" ] && mv -f "$rsav" "$sram"
 else
   [ ! -z "$sram" ] && [ -f "$rsram" ] && mv -f "$rsram" "$sram"
