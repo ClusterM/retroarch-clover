@@ -31,6 +31,7 @@ Please note:
 - To make your own RetroArch modules, use the structure from libretro_core_template.zip. Use exisiting modules as a reference.
 - To add your own BIOS images for custom cores, use bios_template.zip (please read the readme.txt inside).
 - To load arcade games that come in the form of ZIP archives, you'll need to change /bin/zip in game's command line arguments to /bin/fba or /bin/cps2 depending on the core needed for the game to run (look at "Additional Information" section for all avaiable /bin/<> commands). For some cores like Final Burn Alpha, BIOS image (e.g. neogeo.zip for Neo-Geo) must be in the game directory.
+- Since version 0.5, you'll need to upload neogeo.zip only once. Just put neogeo.zip to any Neo-Geo game you want, synchronize and launch it once for every other game to work automatically or just upload neogeo.zip to RA's system folder using BIOS template. You won't have to include neogeo.zip anymore unless you uninstall hakchi and decide to install it again.
 - If the file extension of your game is not supported by Hakchi2, you may need to change the path in command line arguments (in Hakchi2's game options) to make it point to the corresponding core
 - To use RetroArch for any NES game, just add "--retroarch" to command line arguments. If you need to specify NES core, use "--retroarch --core fceumm" to use FCEUmm for this game or "--retroarch --core nestopia" to use Nestopia
 - To use Nestopia instead of FCEUmm, install use_nestopia.hmod module
