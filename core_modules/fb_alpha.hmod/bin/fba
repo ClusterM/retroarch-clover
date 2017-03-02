@@ -1,2 +1,13 @@
 #!/bin/sh
+system="/etc/libretro/system"
+rom=$1
+game_path=$(dirname "$rom")
+
+if [ ! -f "$system/neogeo.zip" ]; then
+	[ -f "$game_path/neogeo.zip" ] && mv "$game_path/neogeo.zip" "$system/neogeo.zip" && ln -s "$system/neogeo.zip" "$game_path/neogeo.zip"
+else
+	[ -f "$game_path/neogeo.zip" ] && [ ! -L "$game_path/neogeo.zip" ] && rm "$game_path/neogeo.zip"
+	[ ! -f "$game_path/neogeo.zip" ] && ln -s "$system/neogeo.zip" "$game_path/neogeo.zip"
+fi
+
 exec retroarch-clover fb_alpha "$@"
