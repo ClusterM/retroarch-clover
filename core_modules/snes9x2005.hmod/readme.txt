@@ -6,7 +6,7 @@ Available executables and arguments:
 - /bin/snes <rom> <clover_args>
   runs "snes9x2005" core
 
-Core by libretro
+Core by libretro, compiled by pcm
 Module by pcm
 Hakchi module system by madmonkey
 NES Mini shell integration by Cluster

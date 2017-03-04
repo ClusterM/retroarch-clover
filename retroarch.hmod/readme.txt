@@ -30,7 +30,7 @@ Known issues:
 - Default CRT filter is not working, scanlines shader added instead, only for NES
 - It's recommended to turn your NES Mini off from shell, not during game
 
-Cores by libretro
+Cores by libretro, compiled by pcm
 NES Mini port by madmonkey
 NES Mini shell integration by Cluster
 Additional modules by pcm
