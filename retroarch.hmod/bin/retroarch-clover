@@ -71,7 +71,7 @@ tm=0
 retroarch -c "$HOME/retroarch.cfg" -vfL "$core" "$rom" $extra &
 rpid=$!
 trap "kill $rpid" SIGTERM
-sleep 2
+sleep 5
 rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm /var/cache/*.sav
 
 # Playing games until reset pressed
