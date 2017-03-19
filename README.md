@@ -21,10 +21,10 @@ The following cores are available as additional modules (in core_modules folder)
 ## How to use this
 
 If you are using hakchi2:
-0. Make sure that you are using hakchi2 version 2.14 or newer.
-1. Go to "releases" tab and download the newest retroarch_with_cores.zip.
-2. Drag-and-drop it on hakchi2 window.
-3. Press "OK" button and follow instructions.
+1. Make sure that you are using hakchi2 version 2.14 or newer.
+2. Go to "releases" tab and download the newest retroarch_with_cores.zip.
+3. Drag-and-drop it on hakchi2 window.
+4. Press "OK" button and follow instructions.
 
 That's all. You can play near all NES games now as well as SNES, Genesis, N64, etc.
 
