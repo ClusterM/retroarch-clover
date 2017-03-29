@@ -30,12 +30,19 @@ done
 
 # saves if any
 rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm /var/cache/*.sav
-[ ! -z "$load" ] && [ -f "$load" ] && [ -z "$nosaves" ] && cp -f "$load" "$autosave" && echo cp -f "$load" "$autosave"
+if [ ! -z "$load" ] && [ -f "$load" ] && [ -z "$nosaves" ]; then
+  if [ $(hexdump -n 2 -e '1/1 "%02X"' "$load") == "1F8B" ]; then
+    cp -f "$load" "$autosave.gz"
+    gunzip -f "$autosave.gz"
+  else
+    cp -f "$load" "$autosave"
+  fi
+fi
 # Nestopia names FDS saves as $id.sav, so here's a quick fix
 if [ "$corename" == "nestopia" ] && [ "$extension" == "fds" ]; then
-  [ ! -z "$sram" ] && [ -f "$sram" ] && cp -f "$sram" "$rsav" && echo cp -f "$sram" "$rsav"
+  [ ! -z "$sram" ] && [ -f "$sram" ] && cp -f "$sram" "$rsav"
 else
-  [ ! -z "$sram" ] && [ -f "$sram" ] && cp -f "$sram" "$rsram" && echo cp -f "$sram" "$rsram"
+  [ ! -z "$sram" ] && [ -f "$sram" ] && cp -f "$sram" "$rsram"
 fi
 
 
@@ -88,7 +95,7 @@ pkill -KILL clover-mcp
 [ -z "$screenshot" ] || [ -z "$nosaves" ] && fbgrab -z 0 "$screenshot"
 
 # Saves!
-[ ! -z "$save" ] && [ -f "$autosave" ] && [ -z "$nosaves" ] && mv -f "$autosave" "$save"
+[ ! -z "$save" ] && [ -f "$autosave" ] && [ -z "$nosaves" ] && gzip -f "$autosave" && mv -f "$autosave.gz" "$save"
 if [ "$corename" == "nestopia" ] && [ "$extension" == "fds" ]; then
   [ ! -z "$sram" ] && [ -f "$rsav" ] && mv -f "$rsav" "$sram"
 else
