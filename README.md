@@ -9,7 +9,7 @@ It can also run games for other consoles. This pack already contains the followi
 - nestopia (Famicom/Nintendo Entertainment System, Famicom Disk System)
 
 The following cores are available as additional modules (in core_modules folder):
-- snes9x2005 (Super Famicom/Super Nintendo)
+- snes9x2010 (Super Famicom/Super Nintendo)
 - gambatte_libretro (Game Boy, Game Boy Color)
 - mgba (Game Boy Advance)
 - genesis_plus_gx (Sega Master System, Genesis/Mega Drive, Game Gear)
@@ -33,6 +33,7 @@ That's all. You can play near all NES games now as well as SNES, Genesis, N64, e
 - To use RetroArch for any NES game, just add "--retroarch" to command line arguments. Use it if some of your NES games glitches with original NES Mini's emulator.
 - To open RetroArch settings menu press Select + Start in game.
 - To add RetroArch shortcut to NES Mini's shell, download and drag-and-drop CloverApp.zip to hakchi2.
+- Make sure that your FDS games have .fds extension (NOT .nes) if you want to run them with built-in emulator (kachikachi)
 
 ### Additional notes for expert users
 
@@ -74,8 +75,12 @@ Executables and arguments for all available cores:
         - /bin/32x <rom> <clover_args>
           runs "picodrive" core
         - /bin/snes <rom> <clover_args>
-          runs "snes9x2005" core
+          runs "snes9x2010" core
+        - /bin/snes10 <rom> <clover_args>
+          runs "snes9x2010" core
         - /bin/n64 <rom> <clover_args>
+          runs "glupen64" core
+        - /bin/n64g <rom> <clover_args>
           runs "glupen64" core
         - /bin/a26 <rom> <clover_args>
           runs "stella" core

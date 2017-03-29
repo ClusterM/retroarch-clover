@@ -1,0 +1,2 @@
+#!/bin/sh
+exec retroarch-clover glupen64 "$@" --ra-nosaves
