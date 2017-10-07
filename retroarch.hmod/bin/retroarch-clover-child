@@ -71,11 +71,10 @@ fi
 # Allow scanlines only for simple systems
 [ "$allow_crt" == "1" ] || crt=0
 
-# Set aspect ratio in config only if current ratio is 20 (1:1 PAR) or 21 (core provided)
-current_ratio=$(cat /etc/libretro/retroarch.cfg | grep "aspect_ratio_index" | sed 's/[^0-9]*//g')
-if [ -z "$ratio" ] || [ "$current_ratio" == "21" ] || [ "$current_ratio" == "20" ]; then 
-  sed -i -e 's/aspect_ratio_index = "[^"]*"/aspect_ratio_index = "'$ratio'"/g' /etc/libretro/retroarch.cfg
-fi
+smooth=$(cat /etc/libretro/$filter.smooth)
+sed -i -e 's/video_smooth = "[^"]*"/video_smooth = "'$smooth'"/g' /etc/libretro/retroarch.cfg
+ratio=$(cat /etc/libretro/$filter.ratio)
+sed -i -e 's/aspect_ratio_index = "[^"]*"/aspect_ratio_index = "'$ratio'"/g' /etc/libretro/retroarch.cfg
 
 # enable shader scanlines if need
 if [ "$crt" == "1" ]; then
@@ -152,6 +151,11 @@ fi
 ts2=$(date +"%s")
 tm=$((tm + ts2 - ts))
 echo $tm > "$timefile"
+
+grep video_smooth /etc/libretro/retroarch.cfg | grep true && current_smooth=true || current_smooth=false
+echo $current_smooth > /etc/libretro/$filter.smooth
+current_ratio=$(cat /etc/libretro/retroarch.cfg | grep "aspect_ratio_index" | sed 's/[^0-9]*//g')
+echo $current_ratio > /etc/libretro/$filter.ratio
 
 # Back to the shell
 /etc/init.d/S81clover-mcp start
