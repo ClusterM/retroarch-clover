@@ -31,6 +31,7 @@ That's all. You can play near all NES games now as well as SNES, Genesis, N64, e
 ### Important notes
 
 - To use RetroArch for any NES game, just add "--retroarch" to command line arguments. Use it if some of your NES games glitches with original NES Mini's emulator.
+- Also you can add "--retroarch" for SNES games on SNES Mini to use RetroArch instead of original emulator.
 - To open RetroArch settings menu press Select + Start in game.
 - To add RetroArch shortcut to NES Mini's shell, download and drag-and-drop CloverApp.zip to hakchi2.
 - Make sure that your FDS games have .fds extension (NOT .nes) if you want to run them with built-in emulator (kachikachi)
@@ -47,6 +48,7 @@ That's all. You can play near all NES games now as well as SNES, Genesis, N64, e
 - To use PicoDrive for all Genesis/Mega Drive games instead of Genesis Plus GX, install use_picodrive.hmod module from additional_mods.zip. Make sure that picodrive module is installed before installing use_picodrive!
 - You can re-enable bilinear filtering in RetroArch's settings (Settings —> Video —> Bilinear Filtering)
 - If you want to use RetroArch's XMB UI instead of RGUI, install xmb_assets.hmod from additional_mods.zip and change Menu Driver in Settings —> Driver —> Menu Driver to "xmb"
+- You need BIOS file to play FDS on SNES Mini while NES Classic Mini already contains it
 
 Executables and arguments for all available cores:
 
@@ -106,4 +108,4 @@ Various additions, tweaks and fixes by pcm720
 
 RetroArch/libretro project: https://www.libretro.com
 
-(c) 2017
+(c) 2017-2018
