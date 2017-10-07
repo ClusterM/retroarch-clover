@@ -14,6 +14,7 @@ autosave="/var/cache/$id.state.auto"
 rsram="/var/cache/$id.srm"
 rsav="/var/cache/$id.sav"
 t_suffix=_time.txt
+demo_time=30
 shift 2
 
 crt=0
@@ -35,10 +36,13 @@ while [ $# -gt 0 ]; do
   [ "$1" == "--ra-extra" ] && extra=$2
   [ "$1" == "--ra-nosaves" ] && nosaves=1
   [ "$1" == "--save-time-path" ] && timefile=$2
+  [ "$1" == "--replay-inputs" ] && demo=1
   shift
 done
 
 [ -z "$timefile" ] && timefile=$load$t_suffix
+
+[ ! -z "$demo" ] && load=$(dirname $load)/savestate
 
 # saves if any
 rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm /var/cache/*.sav
@@ -100,7 +104,13 @@ power_pid=$!
 dd if=$reset_file of=/dev/null count=1 2> /dev/null &
 reset_pid=$!
 
-sleep 2
+# Demo mode enabled
+if [ ! -z "$demo" ]; then
+  dd if=/dev/input/event2 of=/dev/null count=1 2> /dev/null &
+  anybutton_pid=$!
+fi
+
+sleep 3
 rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm /var/cache/*.sav
 
 # Playing games until reset pressed
@@ -108,11 +118,20 @@ while [ true ]; do
   kill -0 $rpid 2> /dev/null || break
   kill -0 $reset_pid 2> /dev/null || break
   kill -0 $power_pid 2> /dev/null || break
+  if [ ! -z "$demo" ]; then
+    # Exit on any button
+    kill -0 $anybutton_pid 2> /dev/null || break
+    # Or after some time
+    ts2=$(date +"%s")
+    tp=$((ts2 - ts))
+    [ "$tp" -ge "$demo_time" ] && break
+  fi
 done
 
 kill $rpid 2> /dev/null
 kill -KILL $reset_pid 2> /dev/null
 kill -KILL $power_pid 2> /dev/null
+[ ! -z "$demo" ] && kill -KILL $anybutton_pid 2> /dev/null
 
 [ ! -z "$save" ] && mkdir -p $(dirname "$save")
 [ ! -z "$sram" ] && mkdir -p $(dirname "$sram")
