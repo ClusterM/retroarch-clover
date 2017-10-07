@@ -1,0 +1,138 @@
+#!/bin/sh
+
+# Kill it! Kill it with fire!
+pkill -KILL clover-mcp
+
+HOME=/etc/libretro
+corename=$1
+core=$HOME/core/$1_libretro.so
+rom=$2
+filename=$(basename "$rom")
+id=${filename%.*}
+extension="${filename##*.}"
+autosave="/var/cache/$id.state.auto"
+rsram="/var/cache/$id.srm"
+rsav="/var/cache/$id.sav"
+t_suffix=_time.txt
+shift 2
+
+crt=0
+allow_crt=0
+
+while [ $# -gt 0 ]; do
+  [ "$1" == "--load-state-file" ] && load=$2
+  [ "$1" == "--save-on-quit" ] && save=$2
+  [ "$1" == "--rollback-input-dir" ] && load=$2/savestate
+  [ "$1" == "--rollback-output-dir" ] && save=$2/savestate
+  [ "$1" == "--save-screenshot-on-quit" ] && screenshot=$2
+  [ "$1" == "--save-data-backing-file" ] && sram=$2
+  [ "$1" == "--graphic-filter" ] && filter=$2
+  [ "$1" == "--enable-crt-scanlines" ] && crt=1
+  [ "$1" == "--video-mode" ] && [ "$2" == "crt-filter" ] && filter=crt720
+  [ "$1" == "--video-mode" ] && [ "$2" == "keep-aspect-ratio" ] && filter=gpu720
+  [ "$1" == "--video-mode" ] && [ "$2" == "pixel-perfect" ] && filter=ppu
+  [ "$1" == "--ra-allow-crt" ] && allow_crt=1
+  [ "$1" == "--ra-extra" ] && extra=$2
+  [ "$1" == "--ra-nosaves" ] && nosaves=1
+  [ "$1" == "--save-time-path" ] && timefile=$2
+  shift
+done
+
+[ -z "$timefile" ] && timefile=$load$t_suffix
+
+# saves if any
+rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm /var/cache/*.sav
+if [ ! -z "$load" ] && [ -f "$load" ] && [ -z "$nosaves" ]; then
+  if [ $(hexdump -n 2 -e '1/1 "%02X"' "$load") == "1F8B" ]; then
+    cp -f "$load" "$autosave.gz"
+    gunzip -f "$autosave.gz"
+  else
+    cp -f "$load" "$autosave"
+  fi
+fi
+# Nestopia names FDS saves as $id.sav, so here's a quick fix
+if [ "$corename" == "nestopia" ] && [ "$extension" == "fds" ]; then
+  [ ! -z "$sram" ] && [ -f "$sram" ] && cp -f "$sram" "$rsav"
+else
+  [ ! -z "$sram" ] && [ -f "$sram" ] && cp -f "$sram" "$rsram"
+fi
+
+# core provided ratio for CRT mode
+[ "$filter" == "crt720" ] && ratio=21 && smooth=false && crt=1
+# core provided ratio for 4:3 mode
+[ "$filter" == "gpu720" ] && ratio=21 && smooth=false
+# pixel perfect - 1:1 for pixel perfect mode
+[ "$filter" == "ppu" ] && ratio=20 && smooth=false
+
+# Allow scanlines only for simple systems
+[ "$allow_crt" == "1" ] || crt=0
+
+# Set aspect ratio in config only if current ratio is 20 (1:1 PAR) or 21 (core provided)
+current_ratio=$(cat /etc/libretro/retroarch.cfg | grep "aspect_ratio_index" | sed 's/[^0-9]*//g')
+if [ -z "$ratio" ] || [ "$current_ratio" == "21" ] || [ "$current_ratio" == "20" ]; then 
+  sed -i -e 's/aspect_ratio_index = "[^"]*"/aspect_ratio_index = "'$ratio'"/g' /etc/libretro/retroarch.cfg
+fi
+
+# enable shader scanlines if need
+if [ "$crt" == "1" ]; then
+  sed -i -e 's/video_shader = "[^"]*"/video_shader = "~\/shaders\/retroarch\.glslp"/g' /etc/libretro/retroarch.cfg
+  rsync -a -c /etc/libretro/shaders/scanline.glslp /etc/libretro/shaders/retroarch.glslp
+else
+  sed -i -e 's/video_shader = "[^"]*"/video_shader = ""/g' /etc/libretro/retroarch.cfg
+fi
+
+# Start timestamp
+ts=$(date +"%s")
+tm=0
+[ -f "$timefile" ] && tm=$(cat "$timefile")
+
+retroarch -c "$HOME/retroarch.cfg" -vfL "$core" "$rom" $extra &
+rpid=$!
+
+# We need last two files
+for i in $(ls /dev/input/event?) ;do
+  power_file=$reset_file
+  reset_file=$i
+done
+
+dd if=$power_file of=/dev/null count=1 2> /dev/null &
+power_pid=$!
+dd if=$reset_file of=/dev/null count=1 2> /dev/null &
+reset_pid=$!
+
+sleep 2
+rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm /var/cache/*.sav
+
+# Playing games until reset pressed
+while [ true ]; do
+  kill -0 $rpid 2> /dev/null || break
+  kill -0 $reset_pid 2> /dev/null || break
+  kill -0 $power_pid 2> /dev/null || break
+done
+
+kill $rpid 2> /dev/null
+kill -KILL $reset_pid 2> /dev/null
+kill -KILL $power_pid 2> /dev/null
+
+[ ! -z "$save" ] && mkdir -p $(dirname "$save")
+[ ! -z "$sram" ] && mkdir -p $(dirname "$sram")
+[ ! -z "$screenshot" ] && mkdir -p $(dirname "$screenshot")
+
+# Screenshot! It's not so fast...
+[ -z "$screenshot" ] || [ -z "$nosaves" ] && fbgrab -z 0 "$screenshot"
+
+# Saves!
+[ ! -z "$save" ] && [ -f "$autosave" ] && [ -z "$nosaves" ] && gzip -f "$autosave" && mv -f "$autosave.gz" "$save"
+if [ "$corename" == "nestopia" ] && [ "$extension" == "fds" ]; then
+  [ ! -z "$sram" ] && [ -f "$rsav" ] && mv -f "$rsav" "$sram"
+else
+  [ ! -z "$sram" ] && [ -f "$rsram" ] && mv -f "$rsram" "$sram"
+fi
+
+# Time
+ts2=$(date +"%s")
+tm=$((tm + ts2 - ts))
+echo $tm > "$timefile"
+
+# Back to the shell
+/etc/init.d/S81clover-mcp start
