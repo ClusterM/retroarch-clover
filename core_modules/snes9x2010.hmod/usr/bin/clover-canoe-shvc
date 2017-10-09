@@ -19,8 +19,13 @@ decorative_options()
   done < "$fn"
 }
 
-original_options=$@
 options=""
+retroarch=0
+clovercon_file=/dev/clovercon1
+video_mode=keep-aspect-ratio
+mode1="-filter 2 -magfilter 1"
+mode2="-filter 1 -magfilter 3"
+mode3="-filter 1 --pixel-perfect"
 
 while [ $# -gt 0 ] ; do
   case "$1" in
@@ -30,12 +35,17 @@ while [ $# -gt 0 ] ; do
   --replay-inputs) options="$options -replay-all -replay" ;;
   --record-inputs) options="$options -record-next -enable-pad-debug-controls" ;;
   --video-mode)
-    case "$2" in
-    keep-aspect-ratio) options="$options -filter 1 -magfilter 3" ;;
-    pixel-perfect) options="$options -filter 1 --pixel-perfect" ;;
-    crt-filter) options="$options -filter 2 -magfilter 1" ;;
-    esac
+    video_mode=$2
     shift
+    ;;
+  --no-scanlines)
+    mode1="-filter 1 -magfilter 1"
+    ;;
+  --no-smooth)
+    mode1="-filter 2 -magfilter 3"
+    ;;
+  --smooth43)
+    mode2="-filter 1 -magfilter 1"
     ;;
   --rollback-mode)
     case "$2" in
@@ -50,7 +60,10 @@ while [ $# -gt 0 ] ; do
   --rollback-output-dir) options="$options -rollback-output-dir $2"; shift ;;
   --rollback-input-dir) options="$options -rollback-input-dir $2"; shift ;;
   --decorative-frame-path) options="$options --use-decorative-frame $2 $(decorative_options $2)"; shift ;;
+  -retroarch) retroarch=1 ;;
   --retroarch) retroarch=1 ;;
+  --core) core=$2; shift ;;
+  -core) core=$2; shift ;;
   *.sfrom)
     if [ -f "$1.gz" ]; then
         options="$options /tmp/ROM.sfrom"
@@ -66,6 +79,12 @@ while [ $# -gt 0 ] ; do
   shift
 done
 
+case "$video_mode" in
+  keep-aspect-ratio) options="$options $mode2" ;;
+  pixel-perfect) options="$options $mode3" ;;
+  crt-filter) options="$options $mode1" ;;
+esac
+
 read BUILD_TYPE < /etc/clover/buildtype
 case "$BUILD_TYPE" in
 devel) log="-log $title_code.log -log-append --debug-menu-settings /var/lib/clover/canoe/debug-menu.json --decorative-frames-path /usr/share/backgrounds" ;;
@@ -73,8 +92,14 @@ test) log="-log $title_code.log" ;;
 *) ;;
 esac
 
-if [ -z "$retroarch" ]; then
+# Hold up to forcely disable RetroArch
+[ -e "$clovercon_file" ] && [ "$(cat $clovercon_file)" == "1000" ] && retroarch=0
+# Hold down to forcely enable RetroArch
+[ -e "$clovercon_file" ] && [ "$(cat $clovercon_file)" == "2000" ] && retroarch=1
+
+if [ "$retroarch" == "0" ]; then
   exec canoe-shvc $options $log
 else
-  exec /bin/snes "$rom" $original_options
+  [ -z "$core" ] && exec snes $filename $args
+  [ -z "$core" ] || exec retroarch-clover $core $filename $args
 fi

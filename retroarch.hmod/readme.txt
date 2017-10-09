@@ -1,7 +1,7 @@
 === RetroArch module for hakchi ===
-version 0.8
+version 0.9
 
-This is a hakchi/hakchi2 module which adds libretro cores and RetroArch frontend to your NES Mini.
+This is a hakchi/hakchi2 module which adds libretro cores and RetroArch frontend to your NES/SNES Mini.
 
 It will automatically detect unsupported NES games and run them instead of the default emulator. Save states will work as usual.
 
@@ -23,12 +23,10 @@ Available executables and arguments:
 - /bin/retroarch
   RetroArch binary
 
-Sometimes default emulator of NES mini is not working with some games when it should. So you can just add "--retroarch" command line argument to use RetroArch.
+Sometimes default emulator of NES/SNES mini is not working with some games when it should. So you can just add "--retroarch" command line argument to use RetroArch.
 
 Known issues:
 - Nintendo 64 save-states are not working, battery backup working fine
-- Default CRT filter is not working, scanlines shader added instead, only for NES
-
 
 Cores by libretro, compiled by pcm
 NES Mini port by madmonkey

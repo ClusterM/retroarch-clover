@@ -17,9 +17,6 @@ t_suffix=_time.txt
 demo_time=30
 shift 2
 
-crt=0
-allow_crt=0
-
 while [ $# -gt 0 ]; do
   [ "$1" == "--load-state-file" ] && load=$2
   [ "$1" == "--save-on-quit" ] && save=$2
@@ -28,11 +25,9 @@ while [ $# -gt 0 ]; do
   [ "$1" == "--save-screenshot-on-quit" ] && screenshot=$2
   [ "$1" == "--save-data-backing-file" ] && sram=$2
   [ "$1" == "--graphic-filter" ] && filter=$2
-  [ "$1" == "--enable-crt-scanlines" ] && crt=1
   [ "$1" == "--video-mode" ] && [ "$2" == "crt-filter" ] && filter=crt720
   [ "$1" == "--video-mode" ] && [ "$2" == "keep-aspect-ratio" ] && filter=gpu720
   [ "$1" == "--video-mode" ] && [ "$2" == "pixel-perfect" ] && filter=ppu
-  [ "$1" == "--ra-allow-crt" ] && allow_crt=1
   [ "$1" == "--ra-extra" ] && extra=$2
   [ "$1" == "--ra-nosaves" ] && nosaves=1
   [ "$1" == "--save-time-path" ] && timefile=$2
@@ -68,21 +63,12 @@ fi
 # pixel perfect - 1:1 for pixel perfect mode
 [ "$filter" == "ppu" ] && ratio=20 && smooth=false
 
-# Allow scanlines only for simple systems
-[ "$allow_crt" == "1" ] || crt=0
-
 smooth=$(cat /etc/libretro/$filter.smooth)
 sed -i -e 's/video_smooth = "[^"]*"/video_smooth = "'$smooth'"/g' /etc/libretro/retroarch.cfg
 ratio=$(cat /etc/libretro/$filter.ratio)
 sed -i -e 's/aspect_ratio_index = "[^"]*"/aspect_ratio_index = "'$ratio'"/g' /etc/libretro/retroarch.cfg
-
-# enable shader scanlines if need
-if [ "$crt" == "1" ]; then
-  sed -i -e 's/video_shader = "[^"]*"/video_shader = "~\/shaders\/retroarch\.glslp"/g' /etc/libretro/retroarch.cfg
-  rsync -a -c /etc/libretro/shaders/scanline.glslp /etc/libretro/shaders/retroarch.glslp
-else
-  sed -i -e 's/video_shader = "[^"]*"/video_shader = ""/g' /etc/libretro/retroarch.cfg
-fi
+overlay=$(cat /etc/libretro/$filter.overlay)
+sed -i -e 's/input_overlay_enable = "[^"]*"/input_overlay_enable = "'$overlay'"/g' /etc/libretro/retroarch.cfg
 
 # Start timestamp
 ts=$(date +"%s")
@@ -92,10 +78,14 @@ tm=0
 retroarch -c "$HOME/retroarch.cfg" -vfL "$core" "$rom" $extra &
 rpid=$!
 
-# We need last two files
+# searching for input devices
 for i in $(ls /dev/input/event?) ;do
-  power_file=$reset_file
-  reset_file=$i
+  local id=$(basename $i)
+  local name=$(cat /sys/class/input/$id/device/name)
+  [ "$name" == "sunxi-knob" ] && power_file=$i
+  [ "$name" == "sunxi-keyboard" ] && reset_file=$i
+  [ "$name" == "Nintendo Clovercon - controller1" ] && controller1_file=$i
+  [ "$name" == "Nintendo Clovercon - controller2" ] && controller2_file=$i
 done
 
 dd if=$power_file of=/dev/null count=1 2> /dev/null &
@@ -105,8 +95,14 @@ reset_pid=$!
 
 # Demo mode enabled
 if [ ! -z "$demo" ]; then
-  dd if=/dev/input/event2 of=/dev/null count=1 2> /dev/null &
-  anybutton_pid=$!
+  if [ ! -z "$controller1_file" ]; then
+    dd if=$controller1_file of=/dev/null count=1 2> /dev/null &
+    anybutton1_pid=$!
+  fi
+  if [ ! -z "$controller2_file" ]; then
+    dd if=$controller2_file of=/dev/null count=1 2> /dev/null &
+    anybutton2_pid=$!
+  fi
 fi
 
 sleep 3
@@ -119,7 +115,12 @@ while [ true ]; do
   kill -0 $power_pid 2> /dev/null || break
   if [ ! -z "$demo" ]; then
     # Exit on any button
-    kill -0 $anybutton_pid 2> /dev/null || break
+    if [ ! -z "$anybutton1_pid" ]; then
+      kill -0 $anybutton1_pid 2> /dev/null || break
+    fi
+    if [ ! -z "$anybutton2_pid" ]; then
+      kill -0 $anybutton2_pid 2> /dev/null || break
+    fi
     # Or after some time
     ts2=$(date +"%s")
     tp=$((ts2 - ts))
@@ -130,7 +131,8 @@ done
 kill $rpid 2> /dev/null
 kill -KILL $reset_pid 2> /dev/null
 kill -KILL $power_pid 2> /dev/null
-[ ! -z "$demo" ] && kill -KILL $anybutton_pid 2> /dev/null
+[ ! -z "$anybutton1_pid" ] && kill -KILL $anybutton1_pid 2> /dev/null
+[ ! -z "$anybutton2_pid" ] && kill -KILL $anybutton2_pid 2> /dev/null
 
 [ ! -z "$save" ] && mkdir -p $(dirname "$save")
 [ ! -z "$sram" ] && mkdir -p $(dirname "$sram")
@@ -154,6 +156,8 @@ echo $tm > "$timefile"
 
 grep video_smooth /etc/libretro/retroarch.cfg | grep true && current_smooth=true || current_smooth=false
 echo $current_smooth > /etc/libretro/$filter.smooth
+grep video_smooth /etc/libretro/retroarch.cfg | grep true && current_overlay=true || current_overlay=false
+echo $current_overlay > /etc/libretro/$filter.overlay
 current_ratio=$(cat /etc/libretro/retroarch.cfg | grep "aspect_ratio_index" | sed 's/[^0-9]*//g')
 echo $current_ratio > /etc/libretro/$filter.ratio
 

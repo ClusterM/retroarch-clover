@@ -28,13 +28,20 @@ fi
 
 while [ $# -gt 0 ]; do
   [ "$1" == "--retroarch" ] && emulator=retroarch
-	[ "$1" == "--core" ] && core=$2
+  [ "$1" == "-retroarch" ] && emulator=retroarch
+  [ "$1" == "--core" ] && core=$2
+  [ "$1" == "-core" ] && core=$2
   shift
 done
 
 # Do not use retroarch for original qd games
 args="$(echo $args | sed 's/--retroarch//g')"
 [ "$extension" == "qd" ] && emulator=kachikachi
+
+# Hold up to forcely disable RetroArch
+[ -e "$clovercon_file" ] && [ "$(cat $clovercon_file)" == "1000" ] && emulator=kachikachi
+# Hold down to forcely enable RetroArch
+[ -e "$clovercon_file" ] && [ "$(cat $clovercon_file)" == "2000" ] && emulator=retroarch
 
 echo using $emulator
 
