@@ -377,7 +377,7 @@ static void convert8888to32_crop_auto(int width, int height, int* outWidth, int*
     if (*outWidth <= 2 || *outHeight <= 2)
     {
 	fprintf(stderr, "invalid size, trying other cropping mode\n");
-        convert8888to32_crop(width, height, outWidth, outHeight, inbuffer, outbuffer);
+        convert8888to32_crop_auto(width, height, outWidth, outHeight, inbuffer, outbuffer);
     }
 }
 
