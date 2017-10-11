@@ -3,7 +3,7 @@ Type=Application
 Exec=/bin/retroarch-mini null
 Path=/var/lib/clover/profiles/0/CLV-Z-RARCH
 Name=RetroArch
-Icon=/usr/share/games/nes/kachikachi/CLV-Z-RARCH/CLV-Z-RARCH.png
+Icon=/usr/share/games/CLV-Z-RARCH/CLV-Z-RARCH.png
 
 [X-CLOVER Game]
 Code=CLV-Z-RARCH
