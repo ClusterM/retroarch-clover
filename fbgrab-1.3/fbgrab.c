@@ -297,6 +297,41 @@ static void convert8888to32_crop(int width, int height, int* outWidth, int* outH
 			   unsigned char *outbuffer)
 {
     unsigned int i;
+    int minX = 160 + 32;
+    int maxX = 1119 - 32;
+    int minY = 0 + 24;
+    int maxY = 719 - 24;
+    int pixels = 0;
+    
+    for (i=0; i < (unsigned int) height*width; i++)
+    {
+	int x = i%width;
+	int y = i/width;
+	if ((minX >= 0 && x >= minX) && (maxX < 0 || x <= maxX) && (minY >= 0 && y >= minY) && (maxY < 0 || y <= maxY))
+	{
+	    /* BLUE  = 0 */
+	    outbuffer[(pixels<<2)+Blue] = inbuffer[i*4+srcBlue];
+	    /* GREEN = 1 */
+	    outbuffer[(pixels<<2)+Green] = inbuffer[i*4+srcGreen];
+	    /* RED   = 2 */
+	    outbuffer[(pixels<<2)+Red] = inbuffer[i*4+srcRed];
+	    /* ALPHA */
+	    outbuffer[(pixels<<2)+Alpha] = /*srcAlpha >= 0 ? inbuffer[i*4+srcAlpha] :*/ 0;
+	    pixels++;
+	}
+    }
+
+    *outWidth = maxX - minX + 1;
+    *outHeight = maxY - minY + 1;
+    fprintf(stderr, "minx=%d maxx=%d miny=%d maxy=%d\n", minX, maxX, minY, maxY);
+    fprintf(stderr, "width=%d height=%d\n", *outWidth, *outHeight);
+}
+
+static void convert8888to32_crop_auto(int width, int height, int* outWidth, int* outHeight,
+			   unsigned char *inbuffer,
+			   unsigned char *outbuffer)
+{
+    unsigned int i;
     int minX = -1;
     int maxX = -1;
     int minY = -1;
@@ -339,7 +374,13 @@ static void convert8888to32_crop(int width, int height, int* outWidth, int* outH
     *outHeight = maxY - minY + 1;
     fprintf(stderr, "minx=%d maxx=%d miny=%d maxy=%d\n", minX, maxX, minY, maxY);
     fprintf(stderr, "width=%d height=%d\n", *outWidth, *outHeight);
+    if (*outWidth <= 2 || *outHeight <= 2)
+    {
+	fprintf(stderr, "invalid size, trying other cropping mode\n");
+        convert8888to32_crop(width, height, outWidth, outHeight, inbuffer, outbuffer);
+    }
 }
+
 
 static void write_PNG(unsigned char *outbuffer, char *filename, 
 				int width, int height, int interlace, int compression)
@@ -381,7 +422,7 @@ static void write_PNG(unsigned char *outbuffer, char *filename,
     
     png_init_io(png_ptr, outfile);
     
-    png_set_compression_level(png_ptr, Z_BEST_COMPRESSION);
+    png_set_compression_level(png_ptr, compression);
     
     bit_depth = 8;
     color_type = PNG_COLOR_TYPE_RGB_ALPHA;
@@ -440,7 +481,7 @@ static void convert_and_write(unsigned char *inbuffer, char *filename,
 	break;
     case 32:
 //	convert8888to32(width, height, inbuffer, outbuffer);
-	convert8888to32_crop(width, height, &outWidth, &outHeight, inbuffer, outbuffer);
+	convert8888to32_crop_auto(width, height, &outWidth, &outHeight, inbuffer, outbuffer);
 	write_PNG(outbuffer, filename, outWidth, outHeight, interlace, compression);
 	break;
     default:

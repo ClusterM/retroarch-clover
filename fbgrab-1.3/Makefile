@@ -3,8 +3,8 @@
 ### modular. So this is a simple gnu Makefile...
 ###
 
-NES_ROOT = /home/cluster/nesmini
-LIBPNG = ../../libpng.arm
+NES_ROOT = /home/cluster/nesmini-root
+LIBPNG = ../../libpng
 ZLIB = ../../zlib
 
 CFLAGS-NES += -L$(NES_ROOT)/lib -L$(NES_ROOT)/usr/lib -I$(LIBPNG) -I$(ZLIB) -Wno-unused-function -Wl,--dynamic-linker=/lib/ld-linux-armhf.so.3,-sysroot=$(NES_ROOT),-rpath,-nostartfiles

@@ -1,5 +1,5 @@
 === RetroArch module for hakchi ===
-version 0.9
+version 0.9c
 
 This is a hakchi/hakchi2 module which adds libretro cores and RetroArch frontend to your NES/SNES Mini.
 

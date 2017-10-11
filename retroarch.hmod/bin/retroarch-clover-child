@@ -126,7 +126,14 @@ while [ true ]; do
     tp=$((ts2 - ts))
     [ "$tp" -ge "$demo_time" ] && break
   fi
+  usleep 200000
 done
+
+# Screenshot! It's not so fast, doing it in a background...
+if [ ! -z "$screenshot" ] && [ -z "$nosaves" ]; then
+  fbgrab -z 0 "$screenshot" &
+  sshot_pid=$!
+fi
 
 kill $rpid 2> /dev/null
 kill -KILL $reset_pid 2> /dev/null
@@ -134,12 +141,13 @@ kill -KILL $power_pid 2> /dev/null
 [ ! -z "$anybutton1_pid" ] && kill -KILL $anybutton1_pid 2> /dev/null
 [ ! -z "$anybutton2_pid" ] && kill -KILL $anybutton2_pid 2> /dev/null
 
+if [ ! -z "$sshot_pid" ]; then
+  wait $sshot_pid
+fi
+
 [ ! -z "$save" ] && mkdir -p $(dirname "$save")
 [ ! -z "$sram" ] && mkdir -p $(dirname "$sram")
 [ ! -z "$screenshot" ] && mkdir -p $(dirname "$screenshot")
-
-# Screenshot! It's not so fast...
-[ -z "$screenshot" ] || [ -z "$nosaves" ] && fbgrab -z 0 "$screenshot"
 
 # Saves!
 [ ! -z "$save" ] && [ -f "$autosave" ] && [ -z "$nosaves" ] && gzip -f "$autosave" && mv -f "$autosave.gz" "$save"
