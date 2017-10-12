@@ -4,7 +4,8 @@ mkdir -p release/cores
 echo "\nPacking core template, BIOS template and CloverApp\n\n"
 zip -rq release/libretro_core_template.zip libretro_core_template.hmod/*
 zip -rq release/bios_template.zip bios_template.hmod/*
-zip -rq release/CloverApp.zip CloverApp
+zip -rq release/CloverApp-ForNES.zip CloverApp-ForNES
+zip -rq release/CloverApp-ForSNES.zip CloverApp-ForSNES
 echo "Packing retroarch.hmod"
 cd retroarch.hmod && tar -czf ../release/retroarch.hmod * && cd ..
 printf "\nModules:\n"

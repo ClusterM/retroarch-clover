@@ -25,13 +25,14 @@ while [ $# -gt 0 ]; do
   [ "$1" == "--save-screenshot-on-quit" ] && screenshot=$2
   [ "$1" == "--save-data-backing-file" ] && sram=$2
   [ "$1" == "--graphic-filter" ] && filter=$2
-  [ "$1" == "--video-mode" ] && [ "$2" == "crt-filter" ] && filter=crt720
+  [ "$1" == "--video-mode" ] && [ "$2" == "crt-filter" ] && filter=crt720 && crt=1
   [ "$1" == "--video-mode" ] && [ "$2" == "keep-aspect-ratio" ] && filter=gpu720
   [ "$1" == "--video-mode" ] && [ "$2" == "pixel-perfect" ] && filter=ppu
   [ "$1" == "--ra-extra" ] && extra=$2
   [ "$1" == "--ra-nosaves" ] && nosaves=1
   [ "$1" == "--save-time-path" ] && timefile=$2
   [ "$1" == "--replay-inputs" ] && demo=1
+  [ "$1" == "--decorative-frame-path" ] && frame=$2
   shift
 done
 
@@ -56,19 +57,21 @@ else
   [ ! -z "$sram" ] && [ -f "$sram" ] && cp -f "$sram" "$rsram"
 fi
 
-# core provided ratio for CRT mode
-[ "$filter" == "crt720" ] && ratio=21 && smooth=false && crt=1
-# core provided ratio for 4:3 mode
-[ "$filter" == "gpu720" ] && ratio=21 && smooth=false
-# pixel perfect - 1:1 for pixel perfect mode
-[ "$filter" == "ppu" ] && ratio=20 && smooth=false
-
 smooth=$(cat /etc/libretro/$filter.smooth)
 sed -i -e 's/video_smooth = "[^"]*"/video_smooth = "'$smooth'"/g' /etc/libretro/retroarch.cfg
 ratio=$(cat /etc/libretro/$filter.ratio)
 sed -i -e 's/aspect_ratio_index = "[^"]*"/aspect_ratio_index = "'$ratio'"/g' /etc/libretro/retroarch.cfg
 overlay=$(cat /etc/libretro/$filter.overlay)
 sed -i -e 's/input_overlay_enable = "[^"]*"/input_overlay_enable = "'$overlay'"/g' /etc/libretro/retroarch.cfg
+
+[ ! -z "$crt" ] && overlay1=scanlines.png
+if [ ! -z "$frame" ]; then
+  [ -z "$crt" ] && overlay1=$frame.png || overlay2=$frame.png
+fi
+overlay1=$(echo "$overlay1" | sed 's/\//\\\//g')
+overlay2=$(echo "$overlay2" | sed 's/\//\\\//g')
+sed -i -e 's/overlay0_overlay = "[^"]*"/overlay0_overlay = "'$overlay1'"/g' /etc/libretro/.config/retroarch/overlay/scanlines.cfg
+sed -i -e 's/overlay0_desc0_overlay = "[^"]*"/overlay0_desc0_overlay = "'$overlay2'"/g' /etc/libretro/.config/retroarch/overlay/scanlines.cfg
 
 # Start timestamp
 ts=$(date +"%s")
@@ -164,7 +167,7 @@ echo $tm > "$timefile"
 
 grep video_smooth /etc/libretro/retroarch.cfg | grep true && current_smooth=true || current_smooth=false
 echo $current_smooth > /etc/libretro/$filter.smooth
-grep video_smooth /etc/libretro/retroarch.cfg | grep true && current_overlay=true || current_overlay=false
+grep input_overlay_enable /etc/libretro/retroarch.cfg | grep true && current_overlay=true || current_overlay=false
 echo $current_overlay > /etc/libretro/$filter.overlay
 current_ratio=$(cat /etc/libretro/retroarch.cfg | grep "aspect_ratio_index" | sed 's/[^0-9]*//g')
 echo $current_ratio > /etc/libretro/$filter.ratio
