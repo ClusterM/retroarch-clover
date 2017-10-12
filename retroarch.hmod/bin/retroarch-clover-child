@@ -27,13 +27,15 @@ while [ $# -gt 0 ]; do
   [ "$1" == "--video-mode" ] && [ "$2" == "pixel-perfect" ] && filter=ppu
   [ "$1" == "--ra-extra" ] && extra=$2
   [ "$1" == "--ra-nosaves" ] && nosaves=1
-  [ "$1" == "--save-time-path" ] && timefile=$2
+  [ "$1" == "--load-time-path" ] && timefile_load=$2
+  [ "$1" == "--save-time-path" ] && timefile_save=$2
   [ "$1" == "--replay-inputs" ] && demo=1
   [ "$1" == "--decorative-frame-path" ] && frame=$2
   shift
 done
 
-[ -z "$timefile" ] && timefile=$load$t_suffix
+[ -z "$timefile_save" ] && timefile_save=$load$t_suffix
+[ -z "$timefile_load" ] && timefile_load=$load$t_suffix
 
 [ ! -z "$demo" ] && load=$(dirname $load)/savestate
 
@@ -73,7 +75,7 @@ sed -i -e 's/overlay0_desc0_overlay = "[^"]*"/overlay0_desc0_overlay = "'$overla
 # Start timestamp
 ts=$(date +"%s")
 tm=0
-[ -f "$timefile" ] && tm=$(cat "$timefile")
+[ -f "$timefile_load" ] && tm=$(cat "$timefile_load")
 
 retroarch -c "$HOME/retroarch.cfg" -vfL "$core" "$rom" $extra &
 rpid=$!
@@ -160,7 +162,7 @@ fi
 # Time
 ts2=$(date +"%s")
 tm=$((tm + ts2 - ts))
-echo $tm > "$timefile"
+echo $tm > "$timefile_save"
 
 grep "video_smooth =" /etc/libretro/retroarch.cfg | grep true && current_smooth=true || current_smooth=false
 echo $current_smooth > /etc/libretro/$filter.smooth
