@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# Kill it! Kill it with fire!
-pkill -KILL clover-mcp
-
 HOME=/etc/libretro
 corename=$1
 core=$HOME/core/$1_libretro.so
@@ -165,11 +162,11 @@ ts2=$(date +"%s")
 tm=$((tm + ts2 - ts))
 echo $tm > "$timefile"
 
-grep video_smooth /etc/libretro/retroarch.cfg | grep true && current_smooth=true || current_smooth=false
+grep "video_smooth =" /etc/libretro/retroarch.cfg | grep true && current_smooth=true || current_smooth=false
 echo $current_smooth > /etc/libretro/$filter.smooth
-grep input_overlay_enable /etc/libretro/retroarch.cfg | grep true && current_overlay=true || current_overlay=false
+grep "input_overlay_enable =" /etc/libretro/retroarch.cfg | grep true && current_overlay=true || current_overlay=false
 echo $current_overlay > /etc/libretro/$filter.overlay
-current_ratio=$(cat /etc/libretro/retroarch.cfg | grep "aspect_ratio_index" | sed 's/[^0-9]*//g')
+current_ratio=$(cat /etc/libretro/retroarch.cfg | grep "aspect_ratio_index = " | sed 's/[^0-9]*//g')
 echo $current_ratio > /etc/libretro/$filter.ratio
 
 # Back to the shell
