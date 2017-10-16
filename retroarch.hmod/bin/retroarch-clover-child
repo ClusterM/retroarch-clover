@@ -107,7 +107,7 @@ if [ ! -z "$demo" ]; then
   fi
 fi
 
-sleep 3
+sleep 6
 rm -f /var/cache/*.state /var/cache/*.auto /var/cache/*.srm /var/cache/*.sav
 
 # Playing games until reset pressed
