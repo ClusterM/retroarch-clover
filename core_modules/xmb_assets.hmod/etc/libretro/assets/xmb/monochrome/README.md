@@ -25,3 +25,6 @@ Guidelines
 ### Export
 
 The PNGs are better exported by the old Inkscape v0.48.5-4. Later versions causes a premultiplied alpha issue with our mipmaping and blending code.
+
+### Theme Font
+ * This theme uses the [M+ P Type-1 Regular](http://mplus-fonts.osdn.jp/design.html#mplus_p1) typeface by the [M+ Fonts Project](http://mplus-fonts.osdn.jp/) covered under the [Free License](http://mplus-fonts.osdn.jp/about-en.html#license).
