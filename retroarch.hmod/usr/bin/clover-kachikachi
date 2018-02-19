@@ -5,6 +5,7 @@ export MALI_NOCLEAR=1
 
 supported_mappers="0 1 2 3 4 5 7 9 10 86 87 184"
 emulator=retroarch
+clovercon_file=/dev/clovercon1
 
 args=$@
 filename=$1
@@ -56,6 +57,11 @@ exec kachikachi \
   --keep-aspect-ratio \
   $args
 fi
+
+# Hold up to forcely disable RetroArch
+[ -e "$clovercon_file" ] && [ "$(cat $clovercon_file)" == "1000" ] && emulator=kachikachi
+# Hold down to forcely enable RetroArch
+[ -e "$clovercon_file" ] && [ "$(cat $clovercon_file)" == "2000" ] && emulator=retroarch
 
 if [ "$emulator" == "retroarch" ]; then
 # Using RetroArch
