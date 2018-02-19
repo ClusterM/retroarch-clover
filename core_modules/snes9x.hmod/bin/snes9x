@@ -5,11 +5,13 @@ filebase=$(basename "$filename")
 extension="${filebase##*.}"
 tmppath=/tmp/rom
 if [ "$extension" == "7z" ]; then
-  mkdir -p $tmppath
-  rm -rf $tmppath/*
-  cd $tmppath
-  tiny7zx x $filename
-  filename=$tmppath/$(ls)
+  rm -rf "$tmppath"
+  mkdir -p "$tmppath"
+  cd "$tmppath"
+  tiny7zx x "$filename"
+  filename="$(ls|head -n1)"
+  mv "$filename" "rom.${filename##*.}"
+  filename="$tmppath/rom.${filename##*.}"
 fi
 
 filebase=$(basename "$filename")
@@ -19,7 +21,7 @@ if [ "$extension" == "sfrom" ]; then
   rm -f $tmppath/*.7z
   rm -f $tmppath/*.bin
   dd if="$filename" of="$tmppath/$filebase.bin" bs=48 skip=1
-  filename=$tmppath/$filebase.bin
+  filename="$tmppath/$filebase.bin"
 fi
 shift
 

@@ -34,7 +34,7 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-[ -z "$timefile_save" ] && timefile_save=$load$t_suffix
+[ -z "$timefile_save" ] && timefile_save=$save$t_suffix
 [ -z "$timefile_load" ] && timefile_load=$load$t_suffix
 
 [ ! -z "$demo" ] && load=$(dirname $load)/savestate
