@@ -1,0 +1,29 @@
+#!/bin/sh
+
+filename=$1
+filebase=$(basename "$filename")
+extension="${filebase##*.}"
+tmppath=/tmp/rom
+if [ "$extension" == "7z" ]; then
+  mkdir -p $tmppath
+  rm -rf $tmppath/*
+  cd $tmppath
+  tiny7zx x $filename
+  filename=$tmppath/$(ls)
+  filename_str=${filename// /_}
+  mv "$filename" "$filename_str"
+  filename=$filename_str
+fi
+
+filebase=$(basename "$filename")
+extension="${filebase##*.}"
+if [ "$extension" == "sfrom" ]; then
+  mkdir -p $tmppath
+  rm -f $tmppath/*.7z
+  rm -f $tmppath/*.bin
+  dd if="$filename" of="$tmppath/$filebase.bin" bs=48 skip=1
+  filename=$tmppath/$filebase.bin
+fi
+shift
+
+exec retroarch-clover snes9x2010 "$filename" "$@"
