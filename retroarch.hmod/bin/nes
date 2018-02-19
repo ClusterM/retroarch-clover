@@ -2,10 +2,9 @@
 core=fceumm
 filename="$1"
 extension="${filename##*.}"
-crt=--ra-allow-crt
+
 if [ "$extension" == "fds" ] || [ "$extension" == "qd" ]; then
   core=nestopia
-  crt=0
 fi
 
-exec retroarch-clover "$core" "$@" $crt
+exec retroarch-clover "$core" "$filename" "$@"

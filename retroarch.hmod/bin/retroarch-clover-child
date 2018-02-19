@@ -82,8 +82,8 @@ rpid=$!
 
 # searching for input devices
 for i in $(ls /dev/input/event?) ;do
-  local id=$(basename $i)
-  local name=$(cat /sys/class/input/$id/device/name)
+  id=$(basename $i)
+  name=$(cat /sys/class/input/$id/device/name)
   [ "$name" == "sunxi-knob" ] && power_file=$i
   [ "$name" == "sunxi-keyboard" ] && reset_file=$i
   [ "$name" == "Nintendo Clovercon - controller1" ] && controller1_file=$i
@@ -133,7 +133,7 @@ done
 
 # Screenshot! It's not so fast, doing it in a background...
 if [ ! -z "$screenshot" ] && [ -z "$nosaves" ]; then
-  fbgrab -z 0 "$screenshot" &
+  fbgrab -z 5 "$screenshot" &
   sshot_pid=$!
 fi
 
