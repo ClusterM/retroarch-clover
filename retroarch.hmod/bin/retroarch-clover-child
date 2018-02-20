@@ -145,6 +145,8 @@ kill -KILL $power_pid 2> /dev/null
 
 if [ ! -z "$sshot_pid" ]; then
   wait $sshot_pid
+else
+  wait $rpid
 fi
 
 [ ! -z "$save" ] && mkdir -p $(dirname "$save")
@@ -152,17 +154,18 @@ fi
 [ ! -z "$screenshot" ] && mkdir -p $(dirname "$screenshot")
 
 # Saves!
-[ ! -z "$save" ] && [ -f "$autosave" ] && [ -z "$nosaves" ] && gzip -f "$autosave" && mv -f "$autosave.gz" "$save"
+if [ ! -z "$save" ] && [ -f "$autosave" ] && [ -z "$nosaves" ]; then
+  gzip -f "$autosave" && mv -f "$autosave.gz" "$save"
+  # Time
+  ts2=$(date +"%s")
+  tm=$((tm + ts2 - ts))
+  echo $tm > "$timefile_save"
+fi
 if [ "$corename" == "nestopia" ] && [ "$extension" == "fds" ]; then
   [ ! -z "$sram" ] && [ -f "$rsav" ] && mv -f "$rsav" "$sram"
 else
   [ ! -z "$sram" ] && [ -f "$rsram" ] && mv -f "$rsram" "$sram"
 fi
-
-# Time
-ts2=$(date +"%s")
-tm=$((tm + ts2 - ts))
-echo $tm > "$timefile_save"
 
 grep "video_smooth =" /etc/libretro/retroarch.cfg | grep true && current_smooth=true || current_smooth=false
 echo $current_smooth > /etc/libretro/$filter.smooth
