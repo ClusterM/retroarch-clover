@@ -22,7 +22,7 @@ while [ $# -gt 0 ]; do
   [ "$1" == "--save-screenshot-on-quit" ] && screenshot=$2
   [ "$1" == "--save-data-backing-file" ] && sram=$2
   [ "$1" == "--graphic-filter" ] && filter=$2
-  [ "$1" == "--video-mode" ] && [ "$2" == "crt-filter" ] && filter=crt720 && crt=1
+  [ "$1" == "--video-mode" ] && [ "$2" == "crt-filter" ] && filter=crt720
   [ "$1" == "--video-mode" ] && [ "$2" == "keep-aspect-ratio" ] && filter=gpu720
   [ "$1" == "--video-mode" ] && [ "$2" == "pixel-perfect" ] && filter=ppu
   [ "$1" == "--ra-extra" ] && extra=$2
@@ -33,6 +33,8 @@ while [ $# -gt 0 ]; do
   [ "$1" == "--decorative-frame-path" ] && frame=$2
   shift
 done
+
+[ "$filter" == "crt720" ] && crt=1
 
 [ -z "$timefile_save" ] && timefile_save=$save$t_suffix
 [ -z "$timefile_load" ] && timefile_load=$load$t_suffix
