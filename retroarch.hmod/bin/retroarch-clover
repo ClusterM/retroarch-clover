@@ -8,7 +8,7 @@ rom=$2
 shift 2
 
 if [ -f "/bin/remote-exec" ]; then
-  echo retroarch-clover-child "$core" "$rom" $@ > /var/exec.flag
+  echo retroarch-clover-child \"$core\" \"$rom\" $@ > /var/exec.flag
 else
   exec retroarch-clover-child "$core" "$rom" $@
 fi

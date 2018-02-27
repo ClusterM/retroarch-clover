@@ -6,6 +6,8 @@ Due to some bug in the core savestates do not work properly.
 Available executables and arguments:
 - /bin/snes <rom> <clover_args>
   runs "snes9x2010" core
+- /bin/snes9x2010 <rom> <clover_args>
+  runs "snes9x2010" core too
 
 For SNES Classic Mini users:
 please note that you can also add "--retroarch" argument to "clover-canoe-shvc" to use RetroArch instead of original emulator. Use it for problem games.
