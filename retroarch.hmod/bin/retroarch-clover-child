@@ -145,11 +145,8 @@ kill -KILL $power_pid 2> /dev/null
 [ ! -z "$anybutton1_pid" ] && kill -KILL $anybutton1_pid 2> /dev/null
 [ ! -z "$anybutton2_pid" ] && kill -KILL $anybutton2_pid 2> /dev/null
 
-if [ ! -z "$sshot_pid" ]; then
-  wait $sshot_pid
-else
-  wait $rpid
-fi
+[ ! -z "$sshot_pid" ] && wait $sshot_pid
+wait $rpid
 
 [ ! -z "$save" ] && mkdir -p $(dirname "$save")
 [ ! -z "$sram" ] && mkdir -p $(dirname "$sram")
