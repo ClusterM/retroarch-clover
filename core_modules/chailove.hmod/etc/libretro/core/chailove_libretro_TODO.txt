@@ -1,0 +1,3 @@
+ChaiLove Core
+
+TODO: Add compiled chailove_libretro.so here.
